@@ -7,7 +7,7 @@ app.use(express.urlencoded({extended: true}));
 
 app.use(cors());
 
-const indexRouter = require('./src/routes/index.routes');
+const indexRouter = require('./routes/index.routes');
 
 app.use("/api", indexRouter);
 
