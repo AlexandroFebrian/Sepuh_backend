@@ -5,9 +5,7 @@ const jwt = require('jsonwebtoken');
 const User = require("../models/User");
 
 const registerUser = async (req, res) => {
-    return res.status(200).json({
-        msg: "OK"
-    });
+    
 }
 
 const loginUser = async (req, res) => {
