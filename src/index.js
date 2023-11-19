@@ -8,6 +8,8 @@ app.use(express.urlencoded({extended: true}));
 app.use(cors());
 
 const indexRouter = require('./routes/index.routes');
+const { connect } = require('./database/connection');
+connect();
 
 app.use("/api", indexRouter);
 

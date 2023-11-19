@@ -15,4 +15,4 @@ function getConn(){
     return connection;
 }
 
-module.exports = {connect, getConn}
+module.exports = { connect, getConn }
