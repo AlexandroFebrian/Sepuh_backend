@@ -3,6 +3,7 @@ const router = express.Router();
 
 const {
     registerUser,
+    verifyUser,
     loginUser,
     fetchUser,
     getUser,
@@ -11,6 +12,7 @@ const {
 } = require("../controllers/usersController");
 
 router.post("/register", registerUser);
+router.get("/verify/:token", verifyUser);
 router.post("/login", loginUser);
 
 router.get("/", fetchUser);
