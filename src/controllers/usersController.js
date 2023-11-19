@@ -60,7 +60,10 @@ const registerUser = async (req, res) => {
             status: false
         });
 
-        return res.status(200).json(result);
+        return res.status(200).json({
+            ...result,
+            verify_link: `http://${ env("HOST") }/api/users/verify/${ token }`
+        });
     } catch (err) {
         return res.status(500).json({
             message: err.message
