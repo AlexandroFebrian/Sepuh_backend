@@ -11,7 +11,7 @@ const userSchema = new Schema({
     employees: [{ type: Schema.Types.ObjectId, ref: 'User' }],
     history: [{ type: Schema.Types.ObjectId, ref: 'Agreement' }],
     list: [{ type: Schema.Types.ObjectId, ref: 'Post' }],
-    status: Boolean
+    status: Number
 }, {
     timestamps: { createdAt: 'create_at', updatedAt: 'update_at' }, versionKey: false
 });

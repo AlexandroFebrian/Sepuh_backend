@@ -10,19 +10,19 @@ const registerUser = async (req, res) => {
 
     if (!email || !name || !password || !role) {
         return res.status(400).json({
-            message: `Input tidak boleh kosong!`
+            message: `Input must not be empty!`
         });
     }
 
     const user = await User.findOne({ email: email });
     if (user) {
         return res.status(400).json({
-            message: `Email user sudah terpakai!`
+            message: `Email is alreadu used!`
         });
     }
 
     try {
-        const token = jwt.sign({ email: email }, env("SECRET_KEY"), { expiresIn: "3h" });
+        const token = jwt.sign({ email: email }, env("SECRET_KEY"), { expiresIn: "365d" });
         const transporter = nodemailer.createTransport({
             service: 'gmail',
             auth: {
@@ -57,7 +57,7 @@ const registerUser = async (req, res) => {
             employees: [],
             history: [],
             list: [],
-            status: false
+            status: 0
         });
 
         return res.status(200).json({
@@ -85,9 +85,29 @@ const verifyUser = async (req, res) => {
     try {
         const decodedToken = jwt.verify(token, env("SECRET_KEY"));
 
-        const result = await User.updateOne({ email: decodedToken.email }, { $set: { status: true } });
+        const user = await User.findOne({ email: decodedToken.email });
 
-        return res.status(201).json(result);
+        if (user) {
+            if (user.status == 1) {
+                return res.status(200).json({
+                    message: `User already verified!`
+                });
+            } else if (user.status == -1) {
+                return res.status(200).json({
+                    message: `User has been banned!`
+                });
+            }
+        } else {
+            return res.status(404).json({
+                message: `Token has been changed by user, email not found!`
+            });
+        }
+
+        const result = await User.updateOne({ email: decodedToken.email }, { $set: { status: 1 } });
+
+        return res.status(201).json({
+            message: `User successfully verfied!`
+        });
     } catch (err) {
         return res.status(500).json({
             message: err.message
@@ -100,14 +120,14 @@ const loginUser = async (req, res) => {
 
     if (!email || !password) {
         return res.status(400).json({
-            message: `Input tidak boleh kosong!`
+            message: `Input must not be empty!`
         });
     }
 
     const user = await User.findOne({ email: email });
     if (!user) {
         return res.status(404).json({
-            message: `Email user tidak terdaftar!`
+            message: `Email have not been registered!`
         });
     }
 
@@ -115,11 +135,11 @@ const loginUser = async (req, res) => {
         const resultPassword = bcrypt.compareSync(password, user.password);
         if (!resultPassword) {
             return res.status(400).json({
-                message: `Password tidak sesuai!`
+                message: `Incorrect password!`
             });
-        } else if (!user.status) {
+        } else if (user.status == 0 || user.status == 1) {
             return res.status(400).json({
-                message: `User belum melakukan verifikasi email!`
+                message: `User have not verified their email!`
             });
         }
 
