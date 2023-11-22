@@ -137,9 +137,13 @@ const loginUser = async (req, res) => {
             return res.status(400).json({
                 message: `Incorrect password!`
             });
-        } else if (user.status == 0 || user.status == 1) {
+        } else if (user.status == 0) {
             return res.status(400).json({
-                message: `User have not verified their email!`
+                message: `User has not verified their email!`
+            });
+        } else if (user.status == -1) {
+            return res.status(400).json({
+                message: `User has been banned!`
             });
         }
 
