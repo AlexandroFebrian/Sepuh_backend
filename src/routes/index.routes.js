@@ -6,6 +6,7 @@ const env = require("../config/env.config");
 const usersRouter = require('./users');
 const postsRouter = require('./posts');
 
+router.use("/public", express.static('./public'));
 router.use("/users", usersRouter);
 router.use("/posts", postsRouter);
 router.post("/cekToken", (req, res) => {

@@ -5,7 +5,7 @@ const nodemailer = require('nodemailer');
 
 const Post = require("../models/Post");
 
-const fetchFreelancerPosts = async (req, res) => {
+const fetchPosts = async (role, res) => {
     try {
         const posts = await Post.aggregate([
             {
@@ -17,8 +17,39 @@ const fetchFreelancerPosts = async (req, res) => {
                 }
             },
             {
+                $unwind: {
+                    path: "$comments",
+                    preserveNullAndEmptyArrays: true
+                }
+            },
+            {
+                $lookup: {
+                    from: "users",
+                    localField: "comments.user_id",
+                    foreignField: "_id",
+                    as: "comments.comment_by"
+                }
+            },
+            {
+                $group: {
+                    _id: "$_id",
+                    title: { $first: "$title" },
+                    duration: { $first: "$duration" },
+                    description: { $first: "$description" },
+                    image: { $first: "$image" },
+                    hashtag: { $first: "$hashtag" },
+                    min_price: { $first: "$min_price" },
+                    max_price: { $first: "$max_price" },
+                    avg_rating: { $first: "$avg_rating" },
+                    visitor: { $first: "$visitor" },
+                    comments: { $push: "$comments" },
+                    post_by: { $first: "$user" },
+                    status: { $first: "$status" }
+                }
+            },
+            {
                 $match: {
-                    "user.role": "Freelancer",
+                    "post_by.role": role,
                     status: 1
                 }
             },
@@ -34,83 +65,58 @@ const fetchFreelancerPosts = async (req, res) => {
                     max_price: 1,
                     avg_rating: 1,
                     visitor: 1,
-                    comments: 1,
+                    comments: {
+                        _id: 1,
+                        comment: 1,
+                        rating: 1,
+                        comment_by: {
+                            _id: 1,
+                            name: 1,
+                            email: 1,
+                            role: 1,
+                            rating: 1,
+                            status: 1
+                        }
+                    },
                     user_id: 1,
                     status: 1,
-                    user: {
+                    post_by: {
                         _id: 1,
                         name: 1,
                         email: 1,
                         role: 1,
-                        balance: 1,
                         rating: 1,
-                        account_number: 1,
-                        employees: 1,
-                        history: 1,
-                        list: 1,
                         status: 1
                     }
                 }
             }
         ]);
+
+        if (posts.length > 0) {
+            const arrImage = [];
+            for (let i = 0; i < posts.length; i++) {
+                const post = posts[i];
+                for (let j = 0; j < post.image.length; j++) {
+                    const img = post.image[j];
+                    arrImage.push(env("HOST") + "/api/public/" + img);
+                }
+                posts[i].image = arrImage;
+            }
+        }
+
+
         res.status(200).json(posts);
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
 }
 
+const fetchFreelancerPosts = async (req, res) => {
+    fetchPosts("Freelancer", res);
+}
+
 const fetchCompanyPosts = async (req, res) => {
-    try {
-        const posts = await Post.aggregate([
-            {
-                $lookup: {
-                    from: "users",
-                    localField: "user_id",
-                    foreignField: "_id",
-                    as: "user"
-                }
-            }, 
-            {
-                $match: {
-                    "user.role": "Company",
-                    status: 1
-                }
-            },
-            {
-                $project: {
-                    _id: 1,
-                    title: 1,
-                    duration: 1,
-                    description: 1,
-                    image: 1,
-                    hashtag: 1,
-                    min_price: 1,
-                    max_price: 1,
-                    avg_rating: 1,
-                    visitor: 1,
-                    comments: 1,
-                    user_id: 1,
-                    status: 1,
-                    user: {
-                        _id: 1,
-                        name: 1,
-                        email: 1,
-                        role: 1,
-                        balance: 1,
-                        rating: 1,
-                        account_number: 1,
-                        employees: 1,
-                        history: 1,
-                        list: 1,
-                        status: 1
-                    }
-                }
-            }
-        ]);
-        res.status(200).json(posts);
-    } catch (error) {
-        res.status(500).json({ error: error.message });
-    }
+    fetchPosts("Company", res);
 }
 
 const addPost = async (req, res) => {
@@ -121,12 +127,12 @@ const addPost = async (req, res) => {
                 message: `Input must not be empty!`
             });
         }
-        const post = await Post.create({
+        await Post.create({
             title: title,
             duration: duration,
-            description: description, 
+            description: description ? description : "", 
             image: image ? image : [],
-            hashtag: hashtag,
+            hashtag: hashtag ? hashtag : [],
             min_price: min_price,
             max_price: max_price,
             avg_rating: 0,
@@ -135,7 +141,10 @@ const addPost = async (req, res) => {
             user_id: req.user._id,
             status: 1
         });
-        res.status(201).json(post);
+
+        res.status(201).json({
+            message: `Post successfully created!`
+        });
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
