@@ -8,6 +8,7 @@ const userSchema = new Schema({
     role: String,
     balance: Number,
     rating: Number,
+    account_number: String,
     employees: [{ type: Schema.Types.ObjectId, ref: 'User' }],
     history: [{ type: Schema.Types.ObjectId, ref: 'Agreement' }],
     list: [{ type: Schema.Types.ObjectId, ref: 'Post' }],
