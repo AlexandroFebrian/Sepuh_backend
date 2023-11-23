@@ -17,7 +17,7 @@ const registerUser = async (req, res) => {
     const user = await User.findOne({ email: email });
     if (user) {
         return res.status(400).json({
-            message: `Email is alreadu used!`
+            message: `Email is already used!`
         });
     }
 
@@ -61,18 +61,8 @@ const registerUser = async (req, res) => {
             status: 0
         });
 
-        return res.status(200).json({
-            name: result._doc.name,
-            email: result._doc.email,
-            role: result._doc.role,
-            balance: result._doc.balance,
-            rating: result._doc.rating,
-            account_number: result._doc.account_number,
-            employees: result._doc.employees,
-            history: result._doc.history,
-            list: result._doc.list,
-            status: result._doc.status,
-            verify_link: `http://${ env("HOST") }/api/users/verify/${ token }`
+        return res.status(201).json({
+            message: `User successfully registered!`
         });
     } catch (err) {
         return res.status(500).json({
@@ -105,7 +95,7 @@ const verifyUser = async (req, res) => {
             });
         }
 
-        const result = await User.updateOne({ email: decodedToken.email }, { $set: { status: 1 } });
+        await User.updateOne({ email: decodedToken.email }, { $set: { status: 1 } });
 
         return res.status(201).json({
             message: `User successfully verfied!`
