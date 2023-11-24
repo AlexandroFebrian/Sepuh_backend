@@ -9,6 +9,12 @@ const postsRouter = require('./posts');
 router.use("/public", express.static('./public'));
 router.use("/users", usersRouter);
 router.use("/posts", postsRouter);
+
+router.get("/category", (req, res) => {
+    const { categories } = require("../database/categories.json");
+    return res.status(200).json(categories);
+});
+
 router.post("/cekToken", (req, res) => {
     const { token } = req.body;
   
