@@ -50,7 +50,9 @@ const registerUser = async (req, res) => {
         await User.create({
             name: name,
             email: email,
-            password: bcryptedPassword, 
+            headline: "",
+            password: bcryptedPassword,
+            profile_picture: "",
             role: role,
             balance: 0,
             rating: 0,
@@ -139,13 +141,21 @@ const loginUser = async (req, res) => {
             });
         }
 
-        const token = jwt.sign({ email: email, name: user.name, role: user.role }, env("SECRET_KEY"), { expiresIn: "3h" });
+        const token = jwt.sign({
+            email: email,
+            name: user.name,
+            headline: user.headline,
+            role: user.role,
+            profile_picture: user.profile_picture
+        }, env("SECRET_KEY"), { expiresIn: "3h" });
 
         return res.status(200).json({
             name: user.name,
+            headline: user.headline,
             email: user.email,
             role: user.role,
             balance: user.balance,
+            profile_picture: user.profile_picture,
             rating: user.rating,
             account_number: user.account_number,
             employees: user.employees,
