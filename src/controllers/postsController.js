@@ -130,9 +130,9 @@ const addPost = async (req, res) => {
         await Post.create({
             title: title,
             duration: duration,
-            description: description ? description : "", 
+            description: description ? description : "",
             image: image ? image : [],
-            hashtag: hashtag ? hashtag : [],
+            hashtag: Array.isArray(hashtag) ? hashtag : hashtag ? [hashtag] : [],
             min_price: min_price,
             max_price: max_price,
             avg_rating: 0,
