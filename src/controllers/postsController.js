@@ -9,88 +9,90 @@ const fetchPosts = async (role, res) => {
     try {
         const posts = await Post.aggregate([
             {
-                $lookup: {
-                    from: "users",
-                    localField: "user_id",
-                    foreignField: "_id",
-                    as: "user"
-                }
+              $lookup: {
+                from: "users",
+                localField: "user_id",
+                foreignField: "_id",
+                as: "user"
+              }
             },
             {
-                $unwind: {
-                    path: "$comments",
-                    preserveNullAndEmptyArrays: true
-                }
+              $unwind: {
+                path: "$comments",
+                preserveNullAndEmptyArrays: true
+              }
             },
             {
-                $lookup: {
-                    from: "users",
-                    localField: "comments.user_id",
-                    foreignField: "_id",
-                    as: "comments.comment_by"
-                }
+              $lookup: {
+                from: "users",
+                localField: "comments.user_id",
+                foreignField: "_id",
+                as: "comments.comment_by"
+              }
             },
             {
-                $group: {
-                    _id: "$_id",
-                    title: { $first: "$title" },
-                    duration: { $first: "$duration" },
-                    description: { $first: "$description" },
-                    image: { $first: "$image" },
-                    hashtag: { $first: "$hashtag" },
-                    min_price: { $first: "$min_price" },
-                    max_price: { $first: "$max_price" },
-                    avg_rating: { $first: "$avg_rating" },
-                    visitor: { $first: "$visitor" },
-                    comments: { $push: "$comments" },
-                    post_by: { $first: "$user" },
-                    status: { $first: "$status" }
-                }
+              $group: {
+                _id: "$_id",
+                title: { $first: "$title" },
+                duration: { $first: "$duration" },
+                description: { $first: "$description" },
+                image: { $first: "$image" },
+                hashtag: { $first: "$hashtag" },
+                min_price: { $first: "$min_price" },
+                max_price: { $first: "$max_price" },
+                avg_rating: { $first: "$avg_rating" },
+                visitor: { $first: "$visitor" },
+                comments: { $push: "$comments" },
+                post_by: { $first: "$user" },
+                status: { $first: "$status" },
+                posted_at: { $first: "$create_at" }
+              }
             },
             {
-                $match: {
-                    "post_by.role": role,
-                    status: 1
-                }
+              $match: {
+                "post_by.role": role,
+                status: 1
+              }
             },
             {
-                $project: {
+              $project: {
+                _id: 1,
+                title: 1,
+                duration: 1,
+                description: 1,
+                image: 1,
+                hashtag: 1,
+                min_price: 1,
+                max_price: 1,
+                avg_rating: 1,
+                visitor: 1,
+                comments: {
+                  _id: 1,
+                  comment: 1,
+                  rating: 1,
+                  comment_by: {
                     _id: 1,
-                    title: 1,
-                    duration: 1,
-                    description: 1,
-                    image: 1,
-                    hashtag: 1,
-                    min_price: 1,
-                    max_price: 1,
-                    avg_rating: 1,
-                    visitor: 1,
-                    comments: {
-                        _id: 1,
-                        comment: 1,
-                        rating: 1,
-                        comment_by: {
-                            _id: 1,
-                            name: 1,
-                            email: 1,
-                            role: 1,
-                            rating: 1,
-                            status: 1
-                        }
-                    },
-                    user_id: 1,
-                    status: 1,
-                    post_by: {
-                        _id: 1,
-                        name: 1,
-                        email: 1,
-                        role: 1,
-                        rating: 1,
-                        status: 1
-                    }
-                }
+                    name: 1,
+                    email: 1,
+                    role: 1,
+                    rating: 1,
+                    status: 1
+                  }
+                },
+                user_id: 1,
+                status: 1,
+                post_by: {
+                  _id: 1,
+                  name: 1,
+                  email: 1,
+                  role: 1,
+                  rating: 1,
+                  status: 1
+                },
+                posted_at: 1
+              }
             }
-        ]);
+          ]);
 
         if (posts.length > 0) {
             const arrImage = [];
