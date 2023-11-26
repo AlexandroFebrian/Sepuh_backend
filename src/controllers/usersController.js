@@ -52,6 +52,15 @@ const registerUser = async (req, res) => {
             email: email,
             headline: "",
             password: bcryptedPassword,
+            date_of_birth: null,
+            bio: "",
+            city: "",
+            country: "",
+            last_education: "",
+            current_education: "",
+            field_of_study: "",
+            year_of_study: 0,
+            header_picture: "",
             profile_picture: "",
             role: role,
             balance: 0,
@@ -176,8 +185,13 @@ const fetchUser = async (req, res) => {
     
 }
 
-const getUser = async (req, res) => {
+const getUserProfile = async (req, res) => {
+    const user = await User.findById(req.user._id, {
+        _id: 0,
+        password: 0
+    });
     
+    return res.status(200).json(user._doc);
 }
 
 const updateUser = async (req, res) => {
@@ -193,7 +207,7 @@ module.exports = {
     verifyUser,
     loginUser,
     fetchUser,
-    getUser,
+    getUserProfile,
     updateUser,
     deleteUser,
 }

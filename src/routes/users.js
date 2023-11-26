@@ -6,7 +6,7 @@ const {
     verifyUser,
     loginUser,
     fetchUser,
-    getUser,
+    getUserProfile,
     updateUser,
     deleteUser,
 } = require("../controllers/usersController");
@@ -18,7 +18,7 @@ router.post("/login", loginUser);
 
 router.use(AuthMiddleware);
 router.get("/", fetchUser);
-router.get("/:email", getUser);
+router.get("/profile", getUserProfile);
 router.put("/update/:email", updateUser);
 router.delete("/delete/:email", deleteUser);
 
