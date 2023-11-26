@@ -15,6 +15,6 @@ app.use("/api", indexRouter);
 
 const port = 3000;
 app.listen(port, () => {
-  console.clear();
-  console.log(`Listening on port ${port}!`);
+    console.log('\x1Bc');
+    console.log(`Listening on port ${port}!`);
 });
