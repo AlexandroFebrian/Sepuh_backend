@@ -7,10 +7,11 @@ const {
     loginUser,
     fetchUser,
     getUserProfile,
-    updateUser,
+    updateUserProfile,
     deleteUser,
 } = require("../controllers/usersController");
 const { AuthMiddleware } = require("../middlewares/AuthMiddleware");
+const MulterUpload = require("../validations/Multer");
 
 router.post("/register", registerUser);
 router.get("/verify/:token", verifyUser);
@@ -19,7 +20,9 @@ router.post("/login", loginUser);
 router.use(AuthMiddleware);
 router.get("/", fetchUser);
 router.get("/profile", getUserProfile);
-router.put("/update/:email", updateUser);
+
+router.put("/profile", MulterUpload.any(), updateUserProfile);
+
 router.delete("/delete/:email", deleteUser);
 
 module.exports = router;

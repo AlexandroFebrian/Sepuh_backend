@@ -190,12 +190,24 @@ const getUserProfile = async (req, res) => {
         _id: 0,
         password: 0
     });
-    
-    return res.status(200).json(user._doc);
+
+    return res.status(200).json({
+        ...user._doc,
+        header_picture: user._doc.header_picture == "" ? "" : `${ env("HOST") }/api/public/${ user._doc.header_picture }`,
+        profile_picture: user._doc.profile_picture == "" ? "" : `${ env("HOST") }/api/public/${ user._doc.profile_picture }`,
+    });
 }
 
-const updateUser = async (req, res) => {
-    
+const updateUserProfile = async (req, res) => {
+    await User.updateOne({
+        _id: req.user._id
+    }, {
+        $set: req.body
+    });
+
+    return res.status(200).json({
+        message: `Successfully update profile`
+    });
 }
 
 const deleteUser = async (req, res) => {
@@ -208,6 +220,6 @@ module.exports = {
     loginUser,
     fetchUser,
     getUserProfile,
-    updateUser,
+    updateUserProfile,
     deleteUser,
 }
