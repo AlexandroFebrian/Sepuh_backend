@@ -155,7 +155,7 @@ const loginUser = async (req, res) => {
             name: user.name,
             headline: user.headline,
             role: user.role,
-            profile_picture: user.profile_picture
+            profile_picture: user.profile_picture == "" ? "" : `${ env("HOST") }/api/public/${ user.profile_picture }`
         }, env("SECRET_KEY"), { expiresIn: "3h" });
 
         return res.status(200).json({
@@ -164,15 +164,15 @@ const loginUser = async (req, res) => {
             email: user.email,
             role: user.role,
             balance: user.balance,
-            profile_picture: user.profile_picture,
+            profile_picture: user.profile_picture == "" ? "" : `${ env("HOST") }/api/public/${ user.profile_picture }`,
             rating: user.rating,
             account_number: user.account_number,
             employees: user.employees,
             history: user.history,
             list: user.list,
             status: user.status,
-            token: token,
-            joined_at: user.create_at
+            joined_at: user.create_at,
+            token: token
         });
     } catch (err) {
         return res.status(500).json({
