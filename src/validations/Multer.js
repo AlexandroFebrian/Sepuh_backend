@@ -16,9 +16,10 @@ const fileStorage = multer.diskStorage({
         const fileName = uniqueSuffix + '.png';
 
         if (req.body) {
+            console.log(file)
             if (Array.isArray(req.body.image)) {
                 req.body.image.push(fileName);
-            } else if (file.fieldname == 'image') {
+            } else if (file.fieldname == 'image[]') {
                 req.body.image = [fileName];
             } else if (file.fieldname == 'header_picture') {
                 req.body.header_picture = fileName;

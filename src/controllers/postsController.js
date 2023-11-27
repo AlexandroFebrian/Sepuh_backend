@@ -124,11 +124,12 @@ const fetchCompanyPosts = async (req, res) => {
 const addPost = async (req, res) => {
     try {
         const { title, duration, description, hashtag, min_price, max_price, image } = req.body;
-        if (!title || !duration || !min_price || !max_price) {
+        if (!title || !min_price || !max_price) {
             return res.status(400).json({
                 message: `Input must not be empty!`
             });
         }
+        console.log(image)
         await Post.create({
             title: title,
             duration: duration,
