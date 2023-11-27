@@ -17,12 +17,11 @@ router.post("/register", registerUser);
 router.get("/verify/:token", verifyUser);
 router.post("/login", loginUser);
 
+router.get("/", fetchUser); // kurang admin middleware
+
 router.use(AuthMiddleware);
-router.get("/", fetchUser);
 router.get("/profile", getUserProfile);
-
 router.put("/profile", MulterUpload.any(), updateUserProfile);
-
 router.delete("/delete/:email", deleteUser);
 
 module.exports = router;

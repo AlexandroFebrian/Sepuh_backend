@@ -170,7 +170,20 @@ const loginUser = async (req, res) => {
 }
 
 const fetchUser = async (req, res) => {
-    
+    const users = await User.find({}, {
+        _id: 0,
+        password: 0
+    });
+
+    for (let i = 0; i < users.length; i++) {
+        const user = users[i];
+        user.header_picture = user.header_picture == "" ? "" : `${ env("HOST") }/api/public/${ user._doc.header_picture }`;
+        user.profile_picture = user.profile_picture == "" ? "" : `${ env("HOST") }/api/public/${ user._doc.profile_picture }`;
+    }
+
+    return res.status(200).json({
+        users: users
+    });
 }
 
 const getUserProfile = async (req, res) => {
