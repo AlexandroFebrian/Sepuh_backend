@@ -6,7 +6,8 @@ const {
     fetchCompanyPosts,
     addPost,
     getUserPosts,
-    getUserPostsByEmail
+    getUserPostsByEmail,
+    getPostsById
 } = require("../controllers/postsController");
 const { AuthMiddleware } = require("../middlewares/AuthMiddleware");
 const MulterUpload = require("../validations/Multer");
@@ -15,6 +16,7 @@ router.get("/freelancer", fetchFreelancerPosts);
 router.get("/company", fetchCompanyPosts);
 router.use(AuthMiddleware);
 router.get("/", getUserPosts);
+router.get("/details/:post_id", getPostsById);
 router.get("/:email", getUserPostsByEmail);
 router.post("/add", MulterUpload.array('image[]'), addPost);
 

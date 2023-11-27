@@ -1,9 +1,10 @@
+const { ObjectId } = require('mongodb');
+const mongoose = require('mongoose');
 const env = require("../config/env.config");
 
 const Post = require("../models/Post");
 
-const fetchPosts = async (role, res, email) => {
-    
+const fetchPosts = async (role, res, email, id) => {
     try {
         const posts = await Post.aggregate([
             {
@@ -49,7 +50,8 @@ const fetchPosts = async (role, res, email) => {
             },
             {
                 $match: {
-                    "posted_by.role": role,
+                    _id: id ? id : { $exists: true },
+                    "posted_by.role": role ? role : /^/,
                     "posted_by.email": email ? email : /^/,
                     "posted_by.status": 1,
                     status: 1
@@ -64,6 +66,7 @@ const fetchPosts = async (role, res, email) => {
             },
             {
                 $project: {
+                    _id: 1,
                     title: 1,
                     duration: 1,
                     duration_type: 1,
@@ -175,7 +178,15 @@ const getUserPosts = async (req, res) => {
 }
 
 const getUserPostsByEmail = async (req, res) => {
-    fetchPosts(/^/, res, req.params.email);
+    fetchPosts(null, res, req.params.email);
+}
+
+const getPostsById = async (req, res) => {
+    const object_id = req.params.post_id;
+    if (!mongoose.Types.ObjectId.isValid(object_id)) {
+        return res.status(400).json({ error: 'Invalid ObjectID' });
+    }
+    fetchPosts(null, res, null, new ObjectId(object_id));
 }
 
 module.exports = {
@@ -183,5 +194,6 @@ module.exports = {
     fetchCompanyPosts,
     addPost,
     getUserPosts,
-    getUserPostsByEmail
+    getUserPostsByEmail,
+    getPostsById
 }
