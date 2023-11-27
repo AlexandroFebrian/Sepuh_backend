@@ -3,6 +3,7 @@ const env = require("../config/env.config");
 const Post = require("../models/Post");
 
 const fetchPosts = async (role, res, email) => {
+    
     try {
         const posts = await Post.aggregate([
             {
@@ -10,7 +11,7 @@ const fetchPosts = async (role, res, email) => {
                     from: "users",
                     localField: "user_id",
                     foreignField: "_id",
-                    as: "user"
+                    as: "posted_by"
                 }
             },
             {
@@ -41,21 +42,28 @@ const fetchPosts = async (role, res, email) => {
                     avg_rating: { $first: "$avg_rating" },
                     visitor: { $first: "$visitor" },
                     comments: { $push: "$comments" },
-                    post_by: { $first: "$user" },
+                    posted_by: { $first: "$posted_by" },
                     status: { $first: "$status" },
                     posted_at: { $first: "$create_at" }
                 }
             },
             {
                 $match: {
-                    "post_by.role": role,
-                    "post_by.email": email ? email : /^/,
+                    "posted_by.role": role,
+                    "posted_by.email": email ? email : /^/,
+                    "posted_by.status": 1,
                     status: 1
                 }
             },
             {
+                $addFields: {
+                    posted_by: {
+                        $arrayElemAt: ["$posted_by", 0]
+                    }
+                }
+            },
+            {
                 $project: {
-                    _id: 1,
                     title: 1,
                     duration: 1,
                     duration_type: 1,
@@ -67,27 +75,23 @@ const fetchPosts = async (role, res, email) => {
                     avg_rating: 1,
                     visitor: 1,
                     comments: {
-                        _id: 1,
                         comment: 1,
                         rating: 1,
                         comment_by: {
-                            _id: 1,
                             name: 1,
                             email: 1,
+                            profile_picture: 1,
                             role: 1,
-                            rating: 1,
-                            status: 1
+                            rating: 1
                         }
                     },
-                    user_id: 1,
                     status: 1,
-                    post_by: {
-                        _id: 1,
+                    posted_by: {
                         name: 1,
                         email: 1,
+                        profile_picture: 1,
                         role: 1,
-                        rating: 1,
-                        status: 1
+                        rating: 1
                     },
                     posted_at: 1
                 }
@@ -95,17 +99,29 @@ const fetchPosts = async (role, res, email) => {
           ]);
 
         if (posts.length > 0) {
-            const arrImage = [];
             for (let i = 0; i < posts.length; i++) {
                 const post = posts[i];
+                const arrImage = [];
                 for (let j = 0; j < post.image.length; j++) {
                     const img = post.image[j];
                     arrImage.push(env("HOST") + "/api/public/" + img);
                 }
                 posts[i].image = arrImage;
+
+                for (let j = 0; j < post.comments.length; j++) {
+                    const comment_by = post.comments[j].comment_by[0];
+
+                    if (comment_by) {
+                        posts[i].comments[j].comment_by[0].profile_picture = env("HOST") + "/api/public/" + comment_by.profile_picture;
+                        posts[i].comments[j].comment_by = posts[i].comments[j].comment_by[0];
+                    } else {
+                        posts[i].comments = [];
+                    }
+                }
+
+                posts[i].posted_by.profile_picture = env("HOST") + "/api/public/" + posts[i].posted_by.profile_picture;
             }
         }
-
 
         res.status(200).json(posts);
     } catch (error) {
