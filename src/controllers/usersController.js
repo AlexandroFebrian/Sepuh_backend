@@ -2,6 +2,7 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const env = require("../config/env.config");
 const nodemailer = require('nodemailer');
+const fs = require('fs').promises;
 
 const User = require("../models/User");
 
@@ -189,6 +190,10 @@ const updateUserProfile = async (req, res) => {
     const user = await User.findOne({
         email: req.user.email
     });
+
+    if (req.body.profile_picture) await fs.unlink(`public/${user.profile_picture}`);
+    if (req.body.header_picture) await fs.unlink(`public/${user.header_picture}`);
+
     await User.updateOne({
         _id: req.user._id
     }, {
