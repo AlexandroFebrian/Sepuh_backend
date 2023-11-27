@@ -159,19 +159,6 @@ const loginUser = async (req, res) => {
         }, env("SECRET_KEY"), { expiresIn: "3h" });
 
         return res.status(200).json({
-            name: user.name,
-            headline: user.headline,
-            email: user.email,
-            role: user.role,
-            balance: user.balance,
-            profile_picture: user.profile_picture == "" ? "" : `${ env("HOST") }/api/public/${ user.profile_picture }`,
-            rating: user.rating,
-            account_number: user.account_number,
-            employees: user.employees,
-            history: user.history,
-            list: user.list,
-            status: user.status,
-            joined_at: user.create_at,
             token: token
         });
     } catch (err) {
@@ -199,6 +186,9 @@ const getUserProfile = async (req, res) => {
 }
 
 const updateUserProfile = async (req, res) => {
+    const user = await User.findOne({
+        email: req.user.email
+    });
     await User.updateOne({
         _id: req.user._id
     }, {

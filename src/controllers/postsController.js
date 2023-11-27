@@ -49,7 +49,7 @@ const fetchPosts = async (role, res, email) => {
             {
                 $match: {
                     "post_by.role": role,
-                    "post_by.email": email,
+                    "post_by.email": email ? email : /^/,
                     status: 1
                 }
             },
