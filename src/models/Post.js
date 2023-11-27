@@ -3,7 +3,8 @@ const { Schema } = mongoose;
 
 const postSchema = new Schema({
     title: String,
-    duration: { type: Number, default: 0 },
+    duration: Number,
+    duration_type: String,
     description: String, 
     image: [{ type: String }],
     hashtag: [{ type: String }],

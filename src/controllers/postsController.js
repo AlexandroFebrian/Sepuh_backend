@@ -1,7 +1,4 @@
-const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
 const env = require("../config/env.config");
-const nodemailer = require('nodemailer');
 
 const Post = require("../models/Post");
 
@@ -60,6 +57,7 @@ const fetchPosts = async (role, res, email) => {
                     _id: 1,
                     title: 1,
                     duration: 1,
+                    duration_type: 1,
                     description: 1,
                     image: 1,
                     hashtag: 1,
@@ -124,7 +122,7 @@ const fetchCompanyPosts = async (req, res) => {
 
 const addPost = async (req, res) => {
     try {
-        const { title, duration, description, hashtag, min_price, max_price, image } = req.body;
+        const { title, duration, duration_type, description, hashtag, min_price, max_price, image } = req.body;
         if (!title || !min_price || !max_price) {
             return res.status(400).json({
                 message: `Input must not be empty!`
@@ -133,7 +131,8 @@ const addPost = async (req, res) => {
         console.log(image)
         await Post.create({
             title: title,
-            duration: duration,
+            duration: duration ? duration : 0,
+            duration_type: duration_type ? duration_type : "",
             description: description ? description : "",
             image: image ? image : [],
             hashtag: Array.isArray(hashtag) ? hashtag : hashtag ? [hashtag] : [],
