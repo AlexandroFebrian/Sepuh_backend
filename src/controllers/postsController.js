@@ -32,6 +32,7 @@ const fetchPosts = async (role, res, email) => {
                     _id: "$_id",
                     title: { $first: "$title" },
                     duration: { $first: "$duration" },
+                    duration_type: { $first: "$duration_type" },
                     description: { $first: "$description" },
                     image: { $first: "$image" },
                     hashtag: { $first: "$hashtag" },
