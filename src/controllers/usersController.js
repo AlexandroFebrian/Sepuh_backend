@@ -186,6 +186,38 @@ const fetchUser = async (req, res) => {
     });
 }
 
+const banUser = async (req, res) => {
+    const { email } = req.params;
+
+    if (email == "") {
+        return res.status(400).json({
+            message: `Email must not be empty!`
+        });
+    }
+
+    await User.updateOne({ email: email }, { $set: { status: -1 } });
+
+    return res.status(200).json({
+        message: `Successfully banned ${email}!`
+    });
+}
+
+const unbanUser = async (req, res) => {
+    const { email } = req.params;
+    
+    if (email == "") {
+        return res.status(400).json({
+            message: `Email must not be empty!`
+        });
+    }
+
+    await User.updateOne({ email: email }, { $set: { status: 1 } });
+
+    return res.status(200).json({
+        message: `Successfully unbanned ${email}!`
+    });
+}
+
 const getUserProfile = async (req, res) => {
     const user = await User.findById(req.user._id, {
         _id: 0,
@@ -227,6 +259,8 @@ module.exports = {
     verifyUser,
     loginUser,
     fetchUser,
+    banUser,
+    unbanUser,
     getUserProfile,
     updateUserProfile,
     deleteUser,
