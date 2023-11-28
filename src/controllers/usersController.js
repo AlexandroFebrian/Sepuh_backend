@@ -169,6 +169,36 @@ const loginUser = async (req, res) => {
     }
 }
 
+const loginAdmin = async (req, res) => {
+    const { username, password } = req.body;
+
+    if (!username || !password) {
+        return res.status(400).json({
+            message: `Input must not be empty!`
+        });
+    }
+
+    try {;
+        if (username != "admin" || password != env("ADMIN_PASSWORD")) {
+            return res.status(400).json({
+                message: `Incorrect username or password!`
+            });
+        }
+
+        const token = jwt.sign({
+            admin_password: bcrypt.hashSync(env("ADMIN_PASSWORD"), 10)
+        }, env("SECRET_KEY"), { expiresIn: "3h" });
+
+        return res.status(200).json({
+            token: token
+        });
+    } catch (err) {
+        return res.status(500).json({
+            message: err.message
+        });
+    }
+}
+
 const fetchUser = async (req, res) => {
     const users = await User.find({}, {
         _id: 0,
@@ -258,6 +288,7 @@ module.exports = {
     registerUser,
     verifyUser,
     loginUser,
+    loginAdmin,
     fetchUser,
     banUser,
     unbanUser,

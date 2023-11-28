@@ -5,7 +5,8 @@ const dictionary = {
     DB_STRING: process.env.DB_STRING,
     EMAIL_ADDRESS: process.env.EMAIL_ADDRESS,
     EMAIL_PASSWORD: process.env.EMAIL_PASSWORD,
-    SECRET_KEY: process.env.SECRET_KEY
+    SECRET_KEY: process.env.SECRET_KEY,
+    ADMIN_PASSWORD: process.env.ADMIN_PASSWORD
 };
 
 module.exports = function env(key) {

@@ -73,7 +73,68 @@ const sendMessage = async (req, res) => {
     });
 }
 
+const getAllChat = async (req, res) => {
+    const chats = await Chat.find({
+        users: { $elemMatch: { user_id: req.user._id } }
+    }).populate({
+        path: "users.user_id",
+        select: "-password"
+    }).populate({
+        path: "messages.sender",
+        select: "-password"
+    }).lean();
+
+    chats.forEach((chat) => {
+        chat.users = chat.users.map((u) => ({
+            _id: u._id,
+            user: u.user_id,
+            seen: u.seen
+        }));
+    });
+
+    return res.status(200).json(chats);
+}
+
+const getChatWith = async (req, res) => {
+    const { user_id } = req.params;
+
+    if (!mongoose.isValidObjectId(user_id)) {
+        return res.status(400).json({
+            message: `Invalid email!`
+        });
+    }
+
+    const chat = await Chat.findOne({
+        $and: [
+            { users: { $elemMatch: { user_id: req.user._id } } },
+            { users: { $elemMatch: { user_id: new ObjectId(user_id) } } }
+        ]
+    }).populate({
+        path: "users.user_id",
+        select: "-password"
+    }).populate({
+        path: "messages.sender",
+        select: "-password"
+    }).lean();
+
+    if (!chat) {
+        return res.status(404).json({
+            message: `Chat not found!`
+        });
+    }
+
+    chat.users = chat.users.map((u) => ({
+        _id: u._id,
+        user: u.user_id,
+        seen: u.seen
+    }));
+
+    return res.status(200).json(chat);
+}
+
 module.exports = {
     createChat,
-    sendMessage
+    sendMessage,
+    getAllChat,
+    getChatWith
 }
