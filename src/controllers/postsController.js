@@ -66,38 +66,6 @@ const fetchPosts = async (role, res, email, id) => {
             },
             {
                 $project: {
-                    // _id: 1,
-                    // title: 1,
-                    // duration: 1,
-                    // duration_type: 1,
-                    // description: 1,
-                    // image: 1,
-                    // hashtag: 1,
-                    // min_price: 1,
-                    // max_price: 1,
-                    // avg_rating: 1,
-                    // visitor: 1,
-                    // comments: {
-                    //     comment: 1,
-                    //     rating: 1,
-                    //     comment_by: {
-                    //         name: 1,
-                    //         email: 1,
-                    //         profile_picture: 1,
-                    //         role: 1,
-                    //         rating: 1
-                    //     }
-                    // },
-                    // status: 1,
-                    // posted_by: {
-                    //     name: 1,
-                    //     email: 1,
-                    //     profile_picture: 1,
-                    //     role: 1,
-                    //     rating: 1
-                    // },
-                    // posted_at: 1
-
                     comments: {
                         comment_by: {
                             _id: 0,
