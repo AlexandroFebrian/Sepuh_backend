@@ -5,10 +5,12 @@ const env = require("../config/env.config");
 
 const usersRouter = require('./users');
 const postsRouter = require('./posts');
+const chatsRouter = require('./chats');
 
 router.use("/public", express.static('./public'));
 router.use("/users", usersRouter);
 router.use("/posts", postsRouter);
+router.use("/chats", chatsRouter);
 
 router.get("/category", (req, res) => {
     const { categories } = require("../database/categories.json");
