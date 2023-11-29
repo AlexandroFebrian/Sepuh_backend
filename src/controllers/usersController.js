@@ -128,7 +128,7 @@ const loginUser = async (req, res) => {
         });
     }
 
-    const user = await User.findOne({ email: email });
+    const user = await User.findOne({ email: email }, { _id: 0, password: 0 });
     if (!user) {
         return res.status(404).json({
             message: `Email have not been registered!`
@@ -152,10 +152,7 @@ const loginUser = async (req, res) => {
         }
 
         const token = jwt.sign({
-            email: email,
-            name: user.name,
-            headline: user.headline,
-            role: user.role,
+            ...user,
             profile_picture: user.profile_picture == "" ? "" : `${ env("HOST") }/api/public/${ user.profile_picture }`
         }, env("SECRET_KEY"), { expiresIn: "3h" });
 
