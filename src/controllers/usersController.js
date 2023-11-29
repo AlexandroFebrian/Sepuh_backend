@@ -128,7 +128,7 @@ const loginUser = async (req, res) => {
         });
     }
 
-    const user = await User.findOne({ email: email }, { _id: 0, password: 0 });
+    const user = await User.findOne({ email: email });
     if (!user) {
         return res.status(404).json({
             message: `Email have not been registered!`
@@ -136,7 +136,7 @@ const loginUser = async (req, res) => {
     }
 
     try {
-        const resultPassword = bcrypt.compareSync(password, user.password);
+        const resultPassword = bcrypt.compareSync(password, user._doc.password);
         if (!resultPassword) {
             return res.status(400).json({
                 message: `Incorrect password!`
@@ -150,9 +150,11 @@ const loginUser = async (req, res) => {
                 message: `User has been banned!`
             });
         }
-
         const token = jwt.sign({
-            ...user,
+            ...user._doc,
+            _id: undefined,
+            password: undefined,
+            header_picture: user.header_picture == "" ? "" : `${ env("HOST") }/api/public/${ user.header_picture }`,
             profile_picture: user.profile_picture == "" ? "" : `${ env("HOST") }/api/public/${ user.profile_picture }`
         }, env("SECRET_KEY"), { expiresIn: "3h" });
 
