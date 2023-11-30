@@ -65,6 +65,11 @@ const fetchPosts = async (role, res, email, id) => {
                 }
             },
             {
+                $sort: {
+                    posted_at: -1
+                }
+            },
+            {
                 $project: {
                     comments: {
                         comment_by: {
