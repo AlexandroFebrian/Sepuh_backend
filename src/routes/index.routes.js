@@ -6,6 +6,7 @@ const env = require("../config/env.config");
 const usersRouter = require('./users');
 const postsRouter = require('./posts');
 const chatsRouter = require('./chats');
+const User = require("../models/User");
 
 router.use("/public", express.static('./public'));
 router.use("/users", usersRouter);
@@ -17,11 +18,19 @@ router.get("/category", (req, res) => {
     return res.status(200).json(categories);
 });
 
-router.post("/cekToken", (req, res) => {
+router.post("/cekToken", async (req, res) => {
     const { token } = req.body;
   
     try {
         const decoded = jwt.verify(token, env("SECRET_KEY"));
+        const user = await User.findOne({ email: decoded.email });
+        if (user.status != 1) {
+            return res.status(401).json({
+                status: false,
+                message: "Invalid token"
+            })
+        }
+
         return res.status(200).json({
             status: true,
             data: decoded
