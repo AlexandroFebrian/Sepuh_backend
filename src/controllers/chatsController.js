@@ -90,6 +90,10 @@ const getAllChat = async (req, res) => {
             user: u.user_id,
             seen: u.seen
         }));
+        chat.users.forEach((u) => {
+            u.user.profile_picture = u.user.profile_picture == "" ? "" : `${ env("HOST") }/api/public/${ u.user.profile_picture }`
+            u.user.header_picture = u.user.header_picture == "" ? "" : `${ env("HOST") }/api/public/${ u.user.header_picture }`
+        });
     });
 
     return res.status(200).json(chats);
@@ -128,6 +132,11 @@ const getChatWith = async (req, res) => {
         user: u.user_id,
         seen: u.seen
     }));
+
+    chat.users.forEach((u) => {
+        u.user.profile_picture = u.user.profile_picture == "" ? "" : `${ env("HOST") }/api/public/${ u.user.profile_picture }`
+        u.user.header_picture = u.user.header_picture == "" ? "" : `${ env("HOST") }/api/public/${ u.user.header_picture }`
+    });
 
     return res.status(200).json(chat);
 }
