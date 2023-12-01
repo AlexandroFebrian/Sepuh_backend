@@ -21,6 +21,7 @@ router.post("/register", registerUser);
 router.get("/verify/:token", verifyUser);
 router.post("/login", loginUser);
 router.post("/admin/login", loginAdmin);
+router.get("/profile/:email", getUserProfileByEmail);
 
 router.get("/", AdminMiddleware, fetchUser);
 router.put("/ban/:email", AdminMiddleware, banUser);
@@ -28,7 +29,6 @@ router.put("/unban/:email", AdminMiddleware, unbanUser);
 
 router.use(AuthMiddleware);
 router.get("/profile", getUserProfile);
-router.get("/profile/:email", getUserProfileByEmail);
 router.put("/profile", MulterUpload.any(), updateUserProfile);
 
 module.exports = router;
