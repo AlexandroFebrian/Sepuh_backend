@@ -14,10 +14,10 @@ const MulterUpload = require("../validations/Multer");
 
 router.get("/freelancer", fetchFreelancerPosts);
 router.get("/company", fetchCompanyPosts);
-router.use(AuthMiddleware);
-router.get("/", getUserPosts);
 router.get("/details/:post_id", getPostsById);
 router.get("/:email", getUserPostsByEmail);
+router.use(AuthMiddleware);
+router.get("/", getUserPosts);
 router.post("/add", MulterUpload.array('image[]'), addPost);
 
 module.exports = router;
