@@ -10,6 +10,7 @@ const {
     banUser,
     unbanUser,
     getUserProfile,
+    getUserProfileByEmail,
     updateUserProfile,
 } = require("../controllers/usersController");
 const { AuthMiddleware } = require("../middlewares/AuthMiddleware");
@@ -27,6 +28,7 @@ router.put("/unban/:email", AdminMiddleware, unbanUser);
 
 router.use(AuthMiddleware);
 router.get("/profile", getUserProfile);
+router.get("/profile/:email", getUserProfileByEmail);
 router.put("/profile", MulterUpload.any(), updateUserProfile);
 
 module.exports = router;

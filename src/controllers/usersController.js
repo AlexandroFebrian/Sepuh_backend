@@ -260,6 +260,21 @@ const getUserProfile = async (req, res) => {
     });
 }
 
+const getUserProfileByEmail = async (req, res) => {
+    const user = await User.findOne({
+        email: req.params.email
+    }, {
+        _id: 0,
+        password: 0
+    });
+
+    return res.status(200).json({
+        ...user._doc,
+        header_picture: user._doc.header_picture == "" ? "" : `${ env("HOST") }/api/public/${ user._doc.header_picture }`,
+        profile_picture: user._doc.profile_picture == "" ? "" : `${ env("HOST") }/api/public/${ user._doc.profile_picture }`
+    });
+}
+
 const updateUserProfile = async (req, res) => {
     const user = await User.findOne({
         email: req.user.email
@@ -279,10 +294,6 @@ const updateUserProfile = async (req, res) => {
     });
 }
 
-const deleteUser = async (req, res) => {
-    
-}
-
 module.exports = {
     registerUser,
     verifyUser,
@@ -292,6 +303,6 @@ module.exports = {
     banUser,
     unbanUser,
     getUserProfile,
-    updateUserProfile,
-    deleteUser,
+    getUserProfileByEmail,
+    updateUserProfile
 }
