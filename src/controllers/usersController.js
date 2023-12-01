@@ -152,7 +152,6 @@ const loginUser = async (req, res) => {
         }
         const token = jwt.sign({
             ...user._doc,
-            _id: undefined,
             password: undefined,
             header_picture: user.header_picture == "" ? "" : `${ env("HOST") }/api/public/${ user.header_picture }`,
             profile_picture: user.profile_picture == "" ? "" : `${ env("HOST") }/api/public/${ user.profile_picture }`

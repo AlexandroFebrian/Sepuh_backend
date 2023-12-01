@@ -68,9 +68,7 @@ const sendMessage = async (req, res) => {
     });
     await chat.save();
 
-    return res.status(200).json({
-        message: `Successfully sent message`
-    });
+    getAllChat(req, res);
 }
 
 const getAllChat = async (req, res) => {
