@@ -3,7 +3,8 @@ const multer = require('multer');
 const allowedExt = [
     'image/jpg', 
     'image/jpeg', 
-    'image/png'
+    'image/png',
+    'application/zip'
 ];
 
 const fileStorage = multer.diskStorage({
@@ -18,15 +19,21 @@ const fileStorage = multer.diskStorage({
         if (req.body) {
             if (Array.isArray(req.body.image)) {
                 req.body.image.push(fileName);
+                cb(null, fileName);
             } else if (file.fieldname == 'image[]') {
                 req.body.image = [fileName];
+                cb(null, fileName);
             } else if (file.fieldname == 'header_picture') {
                 req.body.header_picture = fileName;
+                cb(null, fileName);
             } else if (file.fieldname == 'profile_picture') {
                 req.body.profile_picture = fileName;
+                cb(null, fileName);
+            } else if (file.fieldname == 'file') {
+                req.body.file = fileName.replace('.png', '.zip');
+                cb(null, fileName.replace('.png', '.zip'));
             }
         }
-        cb(null, fileName);
     }
 });
 

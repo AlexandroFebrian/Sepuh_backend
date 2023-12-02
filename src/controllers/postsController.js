@@ -132,7 +132,7 @@ const addPost = async (req, res) => {
                 message: `Input must not be empty!`
             });
         }
-        console.log(image)
+        
         await Post.create({
             title: title,
             duration: duration ? duration : 0,
