@@ -3,15 +3,18 @@ const router = express.Router();
 const jwt = require('jsonwebtoken');
 const env = require("../config/env.config");
 
+const User = require("../models/User");
+
 const usersRouter = require('./users');
 const postsRouter = require('./posts');
 const chatsRouter = require('./chats');
-const User = require("../models/User");
+const agreementsRouter = require('./agreements');
 
 router.use("/public", express.static('./public'));
 router.use("/users", usersRouter);
 router.use("/posts", postsRouter);
 router.use("/chats", chatsRouter);
+router.use("/agreements", agreementsRouter);
 
 router.get("/category", (req, res) => {
     const { categories } = require("../database/categories.json");
