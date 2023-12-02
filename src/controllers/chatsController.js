@@ -33,6 +33,8 @@ const createChat = async (req, res) => {
         ],
         messages: []
     });
+
+    return res.status(200).json({ message: `User chat created!` });
 }
 
 const sendMessage = async (req, res) => {
