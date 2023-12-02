@@ -317,6 +317,16 @@ const addToList = async (req, res) => {
         });
     }
 
+    const user_list = await User.findOne({
+        list: { $in: [new ObjectId(post_id)] }
+    });
+
+    if (user_list) {
+        return res.status(400).json({
+            message: `Post already in list!`
+        });
+    }
+
     await User.updateOne({
         _id: req.user._id
     }, {
