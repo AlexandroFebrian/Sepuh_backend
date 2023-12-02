@@ -318,6 +318,7 @@ const addToList = async (req, res) => {
     }
 
     const user_list = await User.findOne({
+        email: req.user.email,
         list: { $in: [new ObjectId(post_id)] }
     });
 
