@@ -5,6 +5,9 @@ const nodemailer = require('nodemailer');
 const fs = require('fs').promises;
 
 const User = require("../models/User");
+const Post = require("../models/Post");
+const { ObjectId } = require('mongodb');
+const { isValidObjectId } = require('mongoose');
 
 const registerUser = async (req, res) => {
     const { email, name, password, role } = req.body;
@@ -293,6 +296,83 @@ const updateUserProfile = async (req, res) => {
     });
 }
 
+const addToList = async (req, res) => {
+    const { post_id } = req.body;
+
+    if (!post_id) {
+        return res.status(400).json({
+            message: `post_id must not be empty!`
+        });
+    } else if (!isValidObjectId(post_id)) {
+        return res.status(400).json({
+            message: `post_id must be valid ObjectId!`
+        });
+    }
+    
+    const post = await Post.findById(post_id);
+
+    if (!post) {
+        return res.status(404).json({
+            message: `Post not found!`
+        });
+    }
+
+    await User.updateOne({
+        _id: req.user._id
+    }, {
+        $push: {
+            list: new ObjectId(post_id)
+        }
+    });
+
+    return res.status(201).json({
+        message: `Successfully add post to list!`
+    });
+}
+
+const fetchList = async (req, res) => {
+    const data = await User.findOne({
+        email: req.user.email
+    }, {
+        _id: 0,
+        list: 1
+    }).populate({
+        path: "list"
+    });
+
+    const list = await User.populate(data.list, {
+        path: "user_id",
+        select: "-password"
+    });
+
+    for (let i = 0; i < list.length; i++) {
+        const image = [];
+        const post = list[i];
+        
+        for (let j = 0; j < post.image.length; j++) {
+            const img = post.image[j];
+            image.push(env("HOST") + "/api/public/" + img);
+        }
+        list[i].image = image;
+        
+        header_picture = list[i].user_id.header_picture;
+        profile_picture = list[i].user_id.profile_picture;
+        
+        if (!header_picture.includes(env("HOST"))) {
+            list[i].user_id.header_picture = header_picture == "" ? "" : `${ env("HOST") }/api/public/${ header_picture }`;
+            list[i].user_id.profile_picture = profile_picture == "" ? "" : `${ env("HOST") }/api/public/${ profile_picture }`;
+        }
+    }
+
+    return res.status(200).json(list.map((item) => {
+        return {
+            ...item._doc,
+            user: item._doc.user_id,
+            user_id: undefined
+        }
+    }));
+}
+
 module.exports = {
     registerUser,
     verifyUser,
@@ -303,5 +383,7 @@ module.exports = {
     unbanUser,
     getUserProfile,
     getUserProfileByEmail,
-    updateUserProfile
+    updateUserProfile,
+    addToList,
+    fetchList
 }

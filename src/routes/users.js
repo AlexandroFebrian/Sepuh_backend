@@ -12,6 +12,8 @@ const {
     getUserProfile,
     getUserProfileByEmail,
     updateUserProfile,
+    addToList,
+    fetchList
 } = require("../controllers/usersController");
 const { AuthMiddleware } = require("../middlewares/AuthMiddleware");
 const MulterUpload = require("../validations/Multer");
@@ -30,5 +32,7 @@ router.put("/unban/:email", AdminMiddleware, unbanUser);
 router.use(AuthMiddleware);
 router.get("/profile", getUserProfile);
 router.put("/profile", MulterUpload.any(), updateUserProfile);
+router.post("/list", addToList);
+router.get("/list", fetchList);
 
 module.exports = router;
