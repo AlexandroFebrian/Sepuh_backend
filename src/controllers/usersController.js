@@ -384,6 +384,43 @@ const fetchList = async (req, res) => {
     }));
 }
 
+const removeFromList = async (req, res) => {
+    const { post_id } = req.body;
+
+    if (!post_id) {
+        return res.status(400).json({
+            message: `post_id must not be empty!`
+        });
+    } else if (!isValidObjectId(post_id)) {
+        return res.status(400).json({
+            message: `post_id must be valid ObjectId!`
+        });
+    }
+
+    const user_list = await User.findOne({
+        email: req.user.email,
+        list: { $in: [new ObjectId(post_id)] }
+    });
+
+    if (!user_list) {
+        return res.status(400).json({
+            message: `Post not in list!`
+        });
+    }
+
+    await User.updateOne({
+        _id: req.user._id
+    }, {
+        $pull: {
+            list: new ObjectId(post_id)
+        }
+    });
+
+    return res.status(200).json({
+        message: `Successfully remove post from list!`
+    });
+}
+
 module.exports = {
     registerUser,
     verifyUser,
@@ -396,5 +433,6 @@ module.exports = {
     getUserProfileByEmail,
     updateUserProfile,
     addToList,
-    fetchList
+    fetchList,
+    removeFromList
 }

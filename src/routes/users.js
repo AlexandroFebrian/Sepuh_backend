@@ -13,7 +13,8 @@ const {
     getUserProfileByEmail,
     updateUserProfile,
     addToList,
-    fetchList
+    fetchList,
+    removeFromList
 } = require("../controllers/usersController");
 const { AuthMiddleware } = require("../middlewares/AuthMiddleware");
 const MulterUpload = require("../validations/Multer");
@@ -34,5 +35,6 @@ router.get("/profile", getUserProfile);
 router.put("/profile", MulterUpload.any(), updateUserProfile);
 router.post("/list", addToList);
 router.get("/list", fetchList);
+router.put("/list", removeFromList);
 
 module.exports = router;
