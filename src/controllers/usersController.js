@@ -378,7 +378,7 @@ const fetchList = async (req, res) => {
     return res.status(200).json(list.map((item) => {
         return {
             ...item._doc,
-            user: item._doc.user_id,
+            posted_by: item._doc.user_id,
             user_id: undefined
         }
     }));
