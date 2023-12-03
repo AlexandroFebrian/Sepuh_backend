@@ -16,7 +16,8 @@ const {
     fetchList,
     removeFromList,
     getUserNotifications,
-    getUserDocument
+    getUserDocument,
+    updateDocument
 } = require("../controllers/usersController");
 const { AuthMiddleware } = require("../middlewares/AuthMiddleware");
 const MulterUpload = require("../validations/Multer");
@@ -40,5 +41,6 @@ router.get("/list", fetchList);
 router.put("/list", removeFromList);
 router.get("/notifications", getUserNotifications);
 router.get("/documents", getUserDocument);
+router.put("/documents", MulterUpload.any(), updateDocument);
 
 module.exports = router;

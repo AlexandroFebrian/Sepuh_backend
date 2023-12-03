@@ -291,8 +291,8 @@ const updateUserProfile = async (req, res) => {
         email: req.user.email
     });
 
-    if (req.body.profile_picture) await fs.unlink(`public/${user.profile_picture}`);
-    if (req.body.header_picture) await fs.unlink(`public/${user.header_picture}`);
+    if (req.body.profile_picture && user.profile_picture != "") await fs.unlink(`public/${user.profile_picture}`);
+    if (req.body.header_picture && user.header_picture != "") await fs.unlink(`public/${user.header_picture}`);
 
     await User.updateOne({
         _id: req.user._id
@@ -472,6 +472,27 @@ const getUserDocument = async (req, res) => {
     });
 }
 
+const updateDocument = async (req, res) => {
+    const user = await User.findOne({
+        email: req.user.email
+    });
+
+    console.log(req.body.identity_card);
+
+    if (req.body.identity_card && user.identity_card != "") await fs.unlink(`public/${user.identity_card}`);
+    if (req.body.curriculum_vitae && user.curriculum_vitae != "") await fs.unlink(`public/${user.curriculum_vitae}`);
+
+    await User.updateOne({
+        _id: req.user._id
+    }, {
+        $set: req.body
+    });
+
+    return res.status(200).json({
+        message: `Successfully update documents`
+    });
+}
+
 module.exports = {
     registerUser,
     verifyUser,
@@ -487,5 +508,6 @@ module.exports = {
     fetchList,
     removeFromList,
     getUserNotifications,
-    getUserDocument
+    getUserDocument,
+    updateDocument
 }

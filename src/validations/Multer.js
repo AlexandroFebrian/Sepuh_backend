@@ -37,7 +37,7 @@ const fileStorage = multer.diskStorage({
                 req.body.identity_card = fileName;
                 cb(null, fileName);
             } else if (file.fieldname == 'curriculum_vitae') {
-                req.body.curriculum_vitae = fileName;
+                req.body.curriculum_vitae = fileName.replace('.png', '.pdf');
                 cb(null, fileName.replace('.png', '.pdf'));
             }
         }
