@@ -55,8 +55,6 @@ const makeAgreement = async (req, res) => {
         status: 0
     });
 
-    console.log(agreement)
-
     return res.status(201).json({
         message: "Success created agreement!",
         id: agreement._id
