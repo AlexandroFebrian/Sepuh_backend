@@ -70,6 +70,7 @@ const registerUser = async (req, res) => {
             balance: 0,
             rating: 0,
             account_number: "",
+            notifications: [],
             employees: [],
             history: [],
             list: [],
@@ -270,6 +271,10 @@ const getUserProfileByEmail = async (req, res) => {
         password: 0
     });
 
+    if (!user) {
+        return res.status(404).json({ message: "User not found!" });
+    }
+
     return res.status(200).json({
         ...user._doc,
         header_picture: user._doc.header_picture == "" ? "" : `${ env("HOST") }/api/public/${ user._doc.header_picture }`,
@@ -421,6 +426,20 @@ const removeFromList = async (req, res) => {
     });
 }
 
+const getUserNotifications = async (req, res) => {
+    const user = await User.findOne({
+        email: req.user.email
+    }, {
+        _id: 0,
+        notifications: 1
+    }).populate({
+        path: "notifications.from",
+        select: "-password"
+    });
+
+    return res.status(200).json(user.notifications.reverse());
+}
+
 module.exports = {
     registerUser,
     verifyUser,
@@ -434,5 +453,6 @@ module.exports = {
     updateUserProfile,
     addToList,
     fetchList,
-    removeFromList
+    removeFromList,
+    getUserNotifications
 }

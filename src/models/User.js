@@ -20,6 +20,13 @@ const userSchema = new Schema({
     balance: Number,
     rating: Number,
     account_number: String,
+    notifications: [{
+        from: { type: Schema.Types.ObjectId, ref: 'User' },
+        message: String,
+        category: String,
+        link: String,
+        read: Boolean
+    }],
     employees: [{ type: Schema.Types.ObjectId, ref: 'User' }],
     history: [{ type: Schema.Types.ObjectId, ref: 'Agreement' }],
     list: [{ type: Schema.Types.ObjectId, ref: 'Post' }],

@@ -135,7 +135,7 @@ const addFile = async (req, res) => {
         time: new Date(),
         status: 0
     });
-    agreement.save();
+    await agreement.save();
 
     res.status(200).json({
         message: `File successfully added!`
