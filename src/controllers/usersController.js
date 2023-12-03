@@ -437,6 +437,18 @@ const getUserNotifications = async (req, res) => {
         select: "-password"
     });
 
+    for (let i = 0; i < user.notifications.length; i++) {
+        const notification = user.notifications[i];
+        user.notifications[i].link = notification.link == "" ? "" : (env("HOST") + notification.link);
+
+        const from = notification.from;
+        profile_picture = from.profile_picture;
+        
+        if (!profile_picture.includes(env("HOST"))) {
+            from.profile_picture = profile_picture == "" ? "" : `${ env("HOST") }/api/public/${ profile_picture }`;
+        }
+    }
+
     return res.status(200).json(user.notifications.reverse());
 }
 

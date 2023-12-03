@@ -21,10 +21,24 @@ const makeAgreement = async (req, res) => {
 
     const role = req.user.role.substring(0, 1);
 
+    const date = new Date();
+    const invoice_template = "INV" + date.getFullYear() + (date.getMonth() + 1).toString().padStart(2, "0") + date.getDate().toString().padStart(2, "0");
+
+    const invoice_number = await Agreement.findOne({
+        invoice: new RegExp(invoice_template)
+    }, {
+        _id: 0,
+        invoice: 1
+    }, {
+        sort: { invoice: -1 }
+    });
+    const invoice = invoice_template + (invoice_number ? (parseInt(invoice_number.invoice.substring(11, 15)) + 1).toString().padStart(4, "0") : "0001");
+
     await Agreement.create({
         start_date: new Date(),
         end_date: null,
         deal_price: 0,
+        invoice: invoice,
         file: [],
         freelancer: new ObjectId(role == "F" ? req.user._id : user_id),
         company: new ObjectId(role == "C" ? req.user._id : user_id),
@@ -142,10 +156,29 @@ const addFile = async (req, res) => {
     });
 }
 
+const fetchAgreements = async (req, res) => {
+    const role = req.user.role;
+
+    if (role == "Freelancer") {
+        const agreements = await Agreement.find({
+            freelancer: req.user._id
+        });
+    
+        return res.status(200).json(agreements);
+    }
+
+    const agreements = await Agreement.find({
+        company: req.user._id
+    });
+
+    return res.status(200).json(agreements);
+}
+
 module.exports = {
     makeAgreement,
     setDealPrice,
     setEndDate,
     changeStatus,
-    addFile
+    addFile,
+    fetchAgreements
 }

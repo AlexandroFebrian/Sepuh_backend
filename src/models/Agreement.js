@@ -5,6 +5,7 @@ const agreementSchema = new Schema({
     start_date: Date,
     end_date: Date,
     deal_price: Number,
+    invoice: String,
     file: [{
         name: String,
         time: Date,
