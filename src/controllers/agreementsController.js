@@ -3,17 +3,26 @@ const mongoose = require('mongoose');
 const env = require("../config/env.config");
 
 const Agreement = require("../models/Agreement");
+const User = require("../models/User");
 
 const makeAgreement = async (req, res) => {
-    const { user_id, post_id } = req.body;
+    const { email, post_id } = req.body;
 
-    if (!user_id || !post_id) {
+    if (!email || !post_id) {
         return res.status(400).json({
             message: "Missing required fields!"
         });
     }
 
-    if (!mongoose.isValidObjectId(user_id) || !mongoose.isValidObjectId(post_id)) {
+    const user = await User.findOne({ email: email });
+    if (!user || user.status == -1) {
+        return res.status(400).json({
+            message: `This account is not found or has been suspended!`
+        });
+    }
+    const user_id = user._id;
+
+    if (!mongoose.isValidObjectId(post_id)) {
         return res.status(400).json({
             message: "Invalid ObjectId!"
         });
@@ -34,7 +43,7 @@ const makeAgreement = async (req, res) => {
     });
     const invoice = invoice_template + (invoice_number ? (parseInt(invoice_number.invoice.substring(11, 15)) + 1).toString().padStart(4, "0") : "0001");
 
-    await Agreement.create({
+    const agreement = await Agreement.create({
         start_date: new Date(),
         end_date: null,
         deal_price: 0,
@@ -46,8 +55,11 @@ const makeAgreement = async (req, res) => {
         status: 0
     });
 
+    console.log(agreement)
+
     return res.status(201).json({
-        message: "Success created agreement!"
+        message: "Success created agreement!",
+        id: agreement._id
     });
 }
 
