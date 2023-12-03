@@ -477,8 +477,6 @@ const updateDocument = async (req, res) => {
         email: req.user.email
     });
 
-    console.log(req.body.identity_card);
-
     if (req.body.identity_card && user.identity_card != "") await fs.unlink(`public/${user.identity_card}`);
     if (req.body.curriculum_vitae && user.curriculum_vitae != "") await fs.unlink(`public/${user.curriculum_vitae}`);
 
