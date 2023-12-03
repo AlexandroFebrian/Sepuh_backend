@@ -44,7 +44,7 @@ const sendMessage = async (req, res) => {
         return res.status(400).json({
             message: `Invalid user_id!`
         });
-    } else if (message == "") {
+    } else if (message == "" || message == null) {
         return res.status(400).json({
             message: `Message must not be empty!`
         });
