@@ -21,6 +21,11 @@ router.get("/category", (req, res) => {
     return res.status(200).json(categories);
 });
 
+router.get("/bank", (req, res) => {
+    const { bank_name } = require("../database/bank.json");
+    return res.status(200).json(bank_name);
+});
+
 router.post("/cekToken", async (req, res) => {
     const { token } = req.body;
   

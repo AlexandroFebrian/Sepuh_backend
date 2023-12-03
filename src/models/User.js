@@ -20,6 +20,10 @@ const userSchema = new Schema({
     balance: Number,
     rating: Number,
     account_number: String,
+    bank_name: String,
+    identity_card: String,
+    curriculum_vitae: String,
+    portofolio: String,
     notifications: [{
         from: { type: Schema.Types.ObjectId, ref: 'User' },
         message: String,

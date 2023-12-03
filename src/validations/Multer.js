@@ -4,7 +4,8 @@ const allowedExt = [
     'image/jpg', 
     'image/jpeg', 
     'image/png',
-    'application/zip'
+    'application/zip',
+    'application/pdf'
 ];
 
 const fileStorage = multer.diskStorage({
@@ -32,6 +33,12 @@ const fileStorage = multer.diskStorage({
             } else if (file.fieldname == 'file') {
                 req.body.file = fileName.replace('.png', '.zip');
                 cb(null, fileName.replace('.png', '.zip'));
+            } else if (file.fieldname == 'identity_card') {
+                req.body.identity_card = fileName;
+                cb(null, fileName);
+            } else if (file.fieldname == 'curriculum_vitae') {
+                req.body.curriculum_vitae = fileName;
+                cb(null, fileName.replace('.png', '.pdf'));
             }
         }
     }

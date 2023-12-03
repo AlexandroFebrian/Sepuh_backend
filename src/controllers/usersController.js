@@ -70,6 +70,10 @@ const registerUser = async (req, res) => {
             balance: 0,
             rating: 0,
             account_number: "",
+            bank_name: "",
+            identity_card: "",
+            curriculum_vitae: "",
+            portofolio: "",
             notifications: [],
             employees: [],
             history: [],
@@ -452,6 +456,22 @@ const getUserNotifications = async (req, res) => {
     return res.status(200).json(user.notifications.reverse());
 }
 
+const getUserDocument = async (req, res) => {
+    const documents = await User.findOne({
+        email: req.user.email
+    }, {
+        identity_card: 1,
+        curriculum_vitae: 1,
+        portofolio: 1
+    });
+
+    return res.status(200).json({
+        ...documents._doc,
+        identity_card: documents.identity_card == "" ? "" : `${ env("HOST") }/api/public/${ documents.identity_card }`,
+        curriculum_vitae: documents.curriculum_vitae == "" ? "" : `${ env("HOST") }/api/public/${ documents.curriculum_vitae }`
+    });
+}
+
 module.exports = {
     registerUser,
     verifyUser,
@@ -466,5 +486,6 @@ module.exports = {
     addToList,
     fetchList,
     removeFromList,
-    getUserNotifications
+    getUserNotifications,
+    getUserDocument
 }
