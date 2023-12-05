@@ -178,14 +178,6 @@ const addView = async (req, res) => {
     if (!mongoose.Types.ObjectId.isValid(post_id)) {
         return res.status(400).json({ error: 'Invalid ObjectID' });
     }
-
-    const post = await Post.findById(post_id);
-
-    if (!post.user_id.equals(req.user._id)) {
-        return res.status(403).json({
-            message: "Forbidden add view at this post!"
-        });
-    }
     
     await Post.updateOne({
         _id: new ObjectId(post_id)
