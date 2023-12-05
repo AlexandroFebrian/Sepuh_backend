@@ -7,7 +7,8 @@ const {
     addPost,
     getUserPosts,
     getUserPostsByEmail,
-    getPostsById
+    getPostsById,
+    addView
 } = require("../controllers/postsController");
 const { AuthMiddleware } = require("../middlewares/AuthMiddleware");
 const MulterUpload = require("../validations/Multer");
@@ -19,5 +20,6 @@ router.get("/:email", getUserPostsByEmail);
 router.use(AuthMiddleware);
 router.get("/", getUserPosts);
 router.post("/add", MulterUpload.array('image[]'), addPost);
+router.put("/:post_id", addView);
 
 module.exports = router;

@@ -166,11 +166,38 @@ const getUserPostsByEmail = async (req, res) => {
 }
 
 const getPostsById = async (req, res) => {
-    const object_id = req.params.post_id;
-    if (!mongoose.Types.ObjectId.isValid(object_id)) {
+    const { post_id } = req.params;
+    if (!mongoose.Types.ObjectId.isValid(post_id)) {
         return res.status(400).json({ error: 'Invalid ObjectID' });
     }
-    fetchPosts(null, res, null, new ObjectId(object_id));
+    fetchPosts(null, res, null, new ObjectId(post_id));
+}
+
+const addView = async (req, res) => {
+    const { post_id } = req.params;
+    if (!mongoose.Types.ObjectId.isValid(post_id)) {
+        return res.status(400).json({ error: 'Invalid ObjectID' });
+    }
+
+    const post = await Post.findById(post_id);
+
+    if (!post.user_id.equals(req.user._id)) {
+        return res.status(403).json({
+            message: "Forbidden add view at this post!"
+        });
+    }
+    
+    await Post.updateOne({
+        _id: new ObjectId(post_id)
+    }, {
+        $inc: {
+            visitor: 1
+        }
+    });
+
+    return res.status(200).json({
+        message: "Success add view!"
+    });
 }
 
 module.exports = {
@@ -179,5 +206,6 @@ module.exports = {
     addPost,
     getUserPosts,
     getUserPostsByEmail,
-    getPostsById
+    getPostsById,
+    addView
 }
