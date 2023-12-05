@@ -7,7 +7,7 @@ const User = require("../models/User");
 const Post = require('../models/Post');
 
 const makeAgreement = async (req, res) => {
-    const { email, post_id } = req.body;
+    const { email, post_id, min_price } = req.body;
 
     if (!email || !post_id) {
         return res.status(400).json({
@@ -47,7 +47,7 @@ const makeAgreement = async (req, res) => {
     const agreement = await Agreement.create({
         start_date: new Date(),
         end_date: null,
-        deal_price: 0,
+        deal_price: min_price ? min_price : 0,
         invoice: invoice,
         file: [],
         freelancer: new ObjectId(role == "F" ? req.user._id : user_id),
@@ -87,11 +87,49 @@ const setDealPrice = async (req, res) => {
         });
     }
 
+    if(req.user.role == "Freelancer"){
+        agreement.freelancer_status = 1;
+        agreement.company_status = 0;
+    }else if(req.user.role == "Company"){
+        agreement.freelancer_status = 0;
+        agreement.company_status = 1;
+    }
+
     agreement.deal_price = deal_price;
     await agreement.save();
 
     return res.status(200).json({
         message: "Success set new deal price!"
+    });
+}
+
+const acceptAgreement = async (req, res) => {
+    const { agreement_id } = req.body;
+
+    if (!agreement_id) {
+        return res.status(400).json({
+            message: "Missing required fields!"
+        });
+    }
+
+    const agreement = await Agreement.findById(agreement_id);
+
+    if (!agreement) {
+        return res.status(404).json({
+            message: "Agreement not found!"
+        });
+    }
+
+    if(req.user.role == "Freelancer"){
+        agreement.freelancer_status = 1;
+    }else if(req.user.role == "Company"){
+        agreement.company_status = 1;
+    }
+
+    await agreement.save();
+
+    return res.status(200).json({
+        message: "Success Accept Bid!"
     });
 }
 
@@ -287,6 +325,7 @@ const getAgreement = async (req, res) => {
 module.exports = {
     makeAgreement,
     setDealPrice,
+    acceptAgreement,
     setEndDate,
     changeStatus,
     addFile,

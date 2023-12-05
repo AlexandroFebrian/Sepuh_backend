@@ -4,6 +4,7 @@ const router = express.Router();
 const {
     makeAgreement,
     setDealPrice,
+    acceptAgreement,
     setEndDate,
     changeStatus,
     addFile,
@@ -17,6 +18,7 @@ const { AdminMiddleware } = require("../middlewares/AdminMiddleware");
 router.use(AuthMiddleware);
 router.post("/", makeAgreement);
 router.put("/price", setDealPrice);
+router.put("/accept", acceptAgreement);
 router.put("/date", setEndDate);
 router.put("/status", changeStatus);
 router.post("/file", MulterUpload.single("file"), addFile);
