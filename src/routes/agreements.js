@@ -7,7 +7,8 @@ const {
     setEndDate,
     changeStatus,
     addFile,
-    fetchAgreements
+    fetchAgreements,
+    getAgreement
 } = require("../controllers/agreementsController");
 const { AuthMiddleware } = require("../middlewares/AuthMiddleware");
 const MulterUpload = require("../validations/Multer");
@@ -20,5 +21,6 @@ router.put("/date", setEndDate);
 router.put("/status", changeStatus);
 router.post("/file", MulterUpload.single("file"), addFile);
 router.get("/", fetchAgreements);
+router.get("/:id", getAgreement);
 
 module.exports = router;

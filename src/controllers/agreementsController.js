@@ -224,11 +224,63 @@ const fetchAgreements = async (req, res) => {
     return res.status(200).json(agreements);
 }
 
+const getAgreement = async (req, res) => {
+    const { id } = req.params;
+
+    if (!mongoose.isValidObjectId(id)) {
+        return res.status(400).json({
+            message: "Invalid ObjectId!"
+        });
+    }
+
+    const agreement = await Agreement.findOne({
+        _id: id
+    }).populate({
+        path: "post",
+        select: "title image"
+    }).populate({
+        path: "company",
+        select: "name profile_picture"
+    }).populate({
+        path: "freelancer",
+        select: "name profile_picture"
+    });
+
+    if (!(agreement.freelancer._id.equals(req.user._id) || agreement.company._id.equals(req.user._id))) {
+        return res.status(403).json({
+            message: "You are not allowed to access this agreement!"
+        });
+    }
+
+    for (let j = 0; j < agreement.post.image.length; j++) {
+        const img = agreement.post.image[j];
+        if (!img.includes(env("HOST"))) {
+            agreement.post.image[j] = img == "" ? "" : `${env("HOST")}/api/public/${img}`;
+        }
+    }
+
+    for (let j = 0; j < agreement.file.length; j++) {
+        const file = agreement.file[j];
+        agreement.file[j].name = `${env("HOST")}/api/public/${file.name}`;
+    }
+
+    if (!agreement.company.profile_picture.includes(env("HOST"))) {
+        agreement.company.profile_picture = agreement.company.profile_picture == "" ? "" : `${env("HOST")}/api/public/${agreement.company.profile_picture}`;
+    }
+
+    if (!agreement.freelancer.profile_picture.includes(env("HOST"))) {
+        agreement.freelancer.profile_picture = agreement.freelancer.profile_picture == "" ? "" : `${env("HOST")}/api/public/${agreement.freelancer.profile_picture}`;
+    }
+
+    return res.status(200).json(agreement);
+}
+
 module.exports = {
     makeAgreement,
     setDealPrice,
     setEndDate,
     changeStatus,
     addFile,
-    fetchAgreements
+    fetchAgreements,
+    getAgreement
 }
