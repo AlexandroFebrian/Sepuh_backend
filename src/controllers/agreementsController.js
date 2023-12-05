@@ -53,6 +53,8 @@ const makeAgreement = async (req, res) => {
         freelancer: new ObjectId(role == "F" ? req.user._id : user_id),
         company: new ObjectId(role == "C" ? req.user._id : user_id),
         post: new ObjectId(post_id),
+        freelancer_status: 0,
+        company_status: 0,
         status: 0
     });
 
