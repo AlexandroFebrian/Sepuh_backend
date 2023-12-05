@@ -4,6 +4,7 @@ const env = require("../config/env.config");
 
 const Agreement = require("../models/Agreement");
 const User = require("../models/User");
+const Post = require('../models/Post');
 
 const makeAgreement = async (req, res) => {
     const { email, post_id } = req.body;
@@ -236,8 +237,7 @@ const getAgreement = async (req, res) => {
     const agreement = await Agreement.findOne({
         _id: id
     }).populate({
-        path: "post",
-        select: "title image"
+        path: "post"
     }).populate({
         path: "company",
         select: "name profile_picture"
@@ -245,6 +245,13 @@ const getAgreement = async (req, res) => {
         path: "freelancer",
         select: "name profile_picture"
     });
+
+    const post = await Post.populate(agreement.post, {
+        path: "user_id",
+        select: "-password"
+    });
+
+    post.user_id.profile_picture = post.user_id.profile_picture == "" ? "" : `${env("HOST")}/api/public/${post.user_id.profile_picture}`;
 
     if (!(agreement.freelancer._id.equals(req.user._id) || agreement.company._id.equals(req.user._id))) {
         return res.status(403).json({
