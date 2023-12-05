@@ -216,8 +216,8 @@ const fetchAgreements = async (req, res) => {
                 agreements[i].post.image[j] = img == "" ? "" : `${env("HOST")}/api/public/${img}`;
             }
         }
-        if (!agr.company.profile_picture.includes(env("HOST"))) {
-            agreements[i].company.profile_picture = agr.company.profile_picture == "" ? "" : `${env("HOST")}/api/public/${agr.company.profile_picture}`;
+        if (!agr.freelancer.profile_picture.includes(env("HOST"))) {
+            agreements[i].freelancer.profile_picture = agr.freelancer.profile_picture == "" ? "" : `${env("HOST")}/api/public/${agr.freelancer.profile_picture}`;
         }
     }
 
