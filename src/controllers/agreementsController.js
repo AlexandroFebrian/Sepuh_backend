@@ -231,10 +231,10 @@ const getAgreement = async (req, res) => {
         path: "post"
     }).populate({
         path: "company",
-        select: "name profile_picture"
+        select: "name profile_picture email"
     }).populate({
         path: "freelancer",
-        select: "name profile_picture"
+        select: "name profile_picture email"
     });
 
     const post = await Post.populate(agreement.post, {
