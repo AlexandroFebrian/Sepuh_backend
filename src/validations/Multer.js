@@ -5,6 +5,8 @@ const allowedExt = [
     'image/jpeg', 
     'image/png',
     'application/zip',
+    'application/x-zip-compressed',
+    'application/x-compressed',
     'application/pdf'
 ];
 
