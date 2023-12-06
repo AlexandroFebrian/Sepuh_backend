@@ -446,6 +446,14 @@ const doneProject = async (req, res) => {
                     status: 2
                 }
             });
+
+            await User.updateOne({
+                _id: new ObjectId(agreement.freelancer)
+            }, {
+                $inc: {
+                    balance: agreement.deal_price
+                }
+            });
         }
     } else {
         await Agreement.updateOne({
@@ -462,6 +470,14 @@ const doneProject = async (req, res) => {
             }, {
                 $set: {
                     status: 2
+                }
+            });
+
+            await User.updateOne({
+                _id: new ObjectId(agreement.freelancer)
+            }, {
+                $inc: {
+                    balance: agreement.deal_price
                 }
             });
         }
