@@ -385,6 +385,7 @@ const createPayment = async (req, res) => {
     
             return res.status(201).json({
                 message: "Requested Payment",
+                invoice: invoice,
                 midtrans: response.data
             });
         });
