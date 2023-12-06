@@ -4,15 +4,17 @@ const router = express.Router();
 const {
     makeAgreement,
     setDealPrice,
-    acceptAgreement,
     setEndDate,
     addFile,
     fetchAgreements,
     getAgreement,
     createPayment,
     midtransResponse,
+    acceptAgreement,
     doneProject,
-    rejectProject
+    rejectProject,
+    acceptFile,
+    rejectFile
 } = require("../controllers/agreementsController");
 const { AuthMiddleware } = require("../middlewares/AuthMiddleware");
 const MulterUpload = require("../validations/Multer");
@@ -23,13 +25,15 @@ router.post("/dSfbZJgaMxGbGYFsRYDq", midtransResponse);
 router.use(AuthMiddleware);
 router.post("/", makeAgreement);
 router.put("/price", setDealPrice);
-router.put("/accept", acceptAgreement);
 router.put("/date", setEndDate);
 router.post("/file", MulterUpload.single("file"), addFile);
 router.get("/", fetchAgreements);
 router.get("/:id", getAgreement);
 router.post("/payment", createPayment);
+router.put("/accept", acceptAgreement);
 router.put("/status/done", doneProject);
 router.put("/status/reject", rejectProject);
+router.put("/file/accept", acceptFile);
+router.put("/file/reject", rejectFile);
 
 module.exports = router;

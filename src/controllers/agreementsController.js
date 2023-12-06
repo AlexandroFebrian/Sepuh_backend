@@ -91,36 +91,6 @@ const setDealPrice = async (req, res) => {
     });
 }
 
-const acceptAgreement = async (req, res) => {
-    const { agreement_id } = req.body;
-
-    if (!agreement_id) {
-        return res.status(400).json({
-            message: "Missing required fields!"
-        });
-    }
-
-    const agreement = await Agreement.findById(agreement_id);
-
-    if (!agreement) {
-        return res.status(404).json({
-            message: "Agreement not found!"
-        });
-    }
-
-    if(req.user.role == "Freelancer"){
-        agreement.freelancer_status = 1;
-    }else if(req.user.role == "Company"){
-        agreement.company_status = 1;
-    }
-
-    await agreement.save();
-
-    return res.status(200).json({
-        message: "Success Accept Bid!"
-    });
-}
-
 const setEndDate = async (req, res) => {
     const { agreement_id, end_date } = req.body;
 
@@ -406,6 +376,36 @@ const midtransResponse = async (req, res) => {
     });
 }
 
+const acceptAgreement = async (req, res) => {
+    const { agreement_id } = req.body;
+
+    if (!agreement_id) {
+        return res.status(400).json({
+            message: "Missing required fields!"
+        });
+    }
+
+    const agreement = await Agreement.findById(agreement_id);
+
+    if (!agreement) {
+        return res.status(404).json({
+            message: "Agreement not found!"
+        });
+    }
+
+    if(req.user.role == "Freelancer"){
+        agreement.freelancer_status = 1;
+    }else if(req.user.role == "Company"){
+        agreement.company_status = 1;
+    }
+
+    await agreement.save();
+
+    return res.status(200).json({
+        message: "Success Accept Bid!"
+    });
+}
+
 const doneProject = async (req, res) => {
     const { agreement_id } = req.body;
 
@@ -506,16 +506,94 @@ const rejectProject = async (req, res) => {
     });
 }
 
+const acceptFile = async (req, res) => {
+    const { agreement_id, file_id } = req.body;
+
+    if (req.user.role == "Freelancer") {
+        return res.status(403).json({
+            message: `Freelancer is not allowed at this endpoint!`
+        });
+    }
+
+    if (!mongoose.isValidObjectId(agreement_id) || !mongoose.isValidObjectId(file_id)) {
+        return res.status(400).json({
+            message: "Invalid ObjectId!"
+        });
+    }
+
+    const agreement = await Agreement.findById(agreement_id);
+    if (!agreement) {
+        return res.status(404).json({
+            message: "Agreement not found!"
+        });
+    }
+
+    if (!(agreement.freelancer._id.equals(req.user._id) || agreement.company._id.equals(req.user._id))) {
+        return res.status(403).json({
+            message: "You are not allowed to access this endpoint!"
+        });
+    }
+
+    const file = agreement.file.find((file) => file._id.equals(file_id));
+    file.status = 1;
+    await agreement.save();
+
+    return res.status(200).json({
+        message: `Success update file status`,
+        agreement: agreement
+    });
+}
+
+const rejectFile = async (req, res) => {
+    const { agreement_id, file_id } = req.body;
+
+    if (req.user.role == "Freelancer") {
+        return res.status(403).json({
+            message: `Freelancer is not allowed at this endpoint!`
+        });
+    }
+
+    if (!mongoose.isValidObjectId(agreement_id) || !mongoose.isValidObjectId(file_id)) {
+        return res.status(400).json({
+            message: "Invalid ObjectId!"
+        });
+    }
+
+    const agreement = await Agreement.findById(agreement_id);
+    if (!agreement) {
+        return res.status(404).json({
+            message: "Agreement not found!"
+        });
+    }
+
+    if (!(agreement.freelancer._id.equals(req.user._id) || agreement.company._id.equals(req.user._id))) {
+        return res.status(403).json({
+            message: "You are not allowed to access this endpoint!"
+        });
+    }
+
+    const file = agreement.file.find((file) => file._id.equals(file_id));
+    file.status = -1;
+    await agreement.save();
+
+    return res.status(200).json({
+        message: `Success update file status`,
+        agreement: agreement
+    });
+}
+
 module.exports = {
     makeAgreement,
     setDealPrice,
-    acceptAgreement,
     setEndDate,
     addFile,
     fetchAgreements,
     getAgreement,
     createPayment,
     midtransResponse,
+    acceptAgreement,
     doneProject,
-    rejectProject
+    rejectProject,
+    acceptFile,
+    rejectFile
 }
