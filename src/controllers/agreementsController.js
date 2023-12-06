@@ -32,24 +32,11 @@ const makeAgreement = async (req, res) => {
 
     const role = req.user.role.substring(0, 1);
 
-    const date = new Date();
-    const invoice_template = "INV" + date.getFullYear() + (date.getMonth() + 1).toString().padStart(2, "0") + date.getDate().toString().padStart(2, "0");
-
-    const invoice_number = await Agreement.findOne({
-        invoice: new RegExp(invoice_template)
-    }, {
-        _id: 0,
-        invoice: 1
-    }, {
-        sort: { invoice: -1 }
-    });
-    const invoice = invoice_template + (invoice_number ? (parseInt(invoice_number.invoice.substring(11, 15)) + 1).toString().padStart(4, "0") : "0001");
-
     const agreement = await Agreement.create({
         start_date: new Date(),
         end_date: null,
         deal_price: min_price ? min_price : 0,
-        invoice: invoice,
+        invoice: "",
         file: [],
         freelancer: new ObjectId(role == "F" ? req.user._id : user_id),
         company: new ObjectId(role == "C" ? req.user._id : user_id),
@@ -350,6 +337,27 @@ const createPayment = async (req, res) => {
             message: "You are not allowed to access this payment!"
         });
     }
+
+    const date = new Date();
+    const invoice_template = "INV" + date.getFullYear() + (date.getMonth() + 1).toString().padStart(2, "0") + date.getDate().toString().padStart(2, "0");
+
+    const invoice_number = await Agreement.findOne({
+        invoice: new RegExp(invoice_template)
+    }, {
+        _id: 0,
+        invoice: 1
+    }, {
+        sort: { invoice: -1 }
+    });
+    const invoice = invoice_template + (invoice_number ? (parseInt(invoice_number.invoice.substring(11, 15)) + 1).toString().padStart(4, "0") : "0001");
+
+    await Agreement.updateOne({
+        _id: new ObjectId(agreement_id)
+    }, {
+        $set: {
+            invoice: invoice
+        }
+    });
     
     const option = {
         method: 'POST',
@@ -361,7 +369,7 @@ const createPayment = async (req, res) => {
         },
         data: {
             transaction_details: {
-                order_id: agreement.invoice,
+                order_id: invoice,
                 gross_amount: agreement.deal_price,
             },
             customer_details: {
