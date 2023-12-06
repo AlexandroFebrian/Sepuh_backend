@@ -367,24 +367,39 @@ const createPayment = async (req, res) => {
             customer_details: {
                 email: req.user.email
             },
-            credit_card: { secure: true },
-            callbacks: { finish: env("FRONTEND_HOST") + "/success" }
+            credit_card: { secure: true }
         }
     }
 
-    await axios.request(option).then(async (response)=>{
-        console.log("Payment created successfully!");
-
-        return res.status(201).json({
-            message: "Requested Payment",
-            midtrans: response.data
+    try {
+        await axios.request(option).then(async (response)=>{
+            console.log("Payment created successfully!");
+    
+            return res.status(201).json({
+                message: "Requested Payment",
+                midtrans: response.data
+            });
         });
-    })
+    } catch (err) {
+        return res.status(500).json({
+            message: err.message
+        });
+    }
 }
 
 const midtransResponse = async (req, res) => {
-    console.log("req : ", req);
-    console.log("res : ", res);
+    const { transaction_status, order_id } = req.body;
+
+    if (transaction_status == "settlement") {
+        await Agreement.updateOne({
+            invoice: order_id
+        }, {
+            $set: {
+                status: 1
+            }
+        });
+    }
+
     return res.status(200).json({
         message: "OK"
     });

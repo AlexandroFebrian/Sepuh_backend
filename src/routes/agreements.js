@@ -17,7 +17,7 @@ const { AuthMiddleware } = require("../middlewares/AuthMiddleware");
 const MulterUpload = require("../validations/Multer");
 const { AdminMiddleware } = require("../middlewares/AdminMiddleware");
 
-router.post("/payment/dSfbZJgaMxGbGYFsRYDq", midtransResponse);
+router.post("/dSfbZJgaMxGbGYFsRYDq", midtransResponse);
 
 router.use(AuthMiddleware);
 router.post("/", makeAgreement);

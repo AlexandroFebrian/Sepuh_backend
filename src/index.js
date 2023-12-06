@@ -12,6 +12,11 @@ const { connect } = require("./database/connection");
 connect();
 
 app.use("/api", indexRouter);
+app.all("*", async (req, res) => {
+    return res.status(404).json({
+        message: `Endpoint not found!`
+    });
+})
 
 const port = 3000;
 app.listen(port, () => {
