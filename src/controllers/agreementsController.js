@@ -148,6 +148,7 @@ const addFile = async (req, res) => {
     agreement.file.push({
         name: req.body.file,
         time: new Date(),
+        comment: "",
         status: 0
     });
     await agreement.save();
@@ -507,7 +508,7 @@ const rejectProject = async (req, res) => {
 }
 
 const acceptFile = async (req, res) => {
-    const { agreement_id, file_id } = req.body;
+    const { agreement_id, file_id, comment } = req.body;
 
     if (req.user.role == "Freelancer") {
         return res.status(403).json({
@@ -536,6 +537,7 @@ const acceptFile = async (req, res) => {
 
     const file = agreement.file.find((file) => file._id.equals(file_id));
     file.status = 1;
+    file.comment = comment;
     await agreement.save();
 
     return res.status(200).json({
@@ -545,7 +547,7 @@ const acceptFile = async (req, res) => {
 }
 
 const rejectFile = async (req, res) => {
-    const { agreement_id, file_id } = req.body;
+    const { agreement_id, file_id, comment } = req.body;
 
     if (req.user.role == "Freelancer") {
         return res.status(403).json({
@@ -574,6 +576,7 @@ const rejectFile = async (req, res) => {
 
     const file = agreement.file.find((file) => file._id.equals(file_id));
     file.status = -1;
+    file.comment = comment;
     await agreement.save();
 
     return res.status(200).json({

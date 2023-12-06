@@ -9,6 +9,7 @@ const agreementSchema = new Schema({
     file: [{
         name: String,
         time: Date,
+        comment: String,
         status: Number
     }],
     freelancer: { type: Schema.Types.ObjectId, ref: 'User' },
