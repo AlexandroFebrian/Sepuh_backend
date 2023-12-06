@@ -152,14 +152,6 @@ const setEndDate = async (req, res) => {
     });
 }
 
-const changeStatus = async (req, res) => {
-    // Nunggu kepastian status ngubahnya gimana
-
-    return res.status(200).json({
-        message: "Success change status!"
-    });
-}
-
 const addFile = async (req, res) => {
     const { agreement_id } = req.body;
 
@@ -413,15 +405,116 @@ const midtransResponse = async (req, res) => {
     });
 }
 
+const doneProject = async (req, res) => {
+    const { agreement_id } = req.body;
+
+    if (!mongoose.isValidObjectId(agreement_id)) {
+        return res.status(400).json({
+            message: "Invalid ObjectId!"
+        });
+    }
+
+    const agreement = await Agreement.findById(agreement_id);
+    if (!agreement) {
+        return res.status(404).json({
+            message: "Agreement not found!"
+        });
+    }
+
+    if (!(agreement.freelancer._id.equals(req.user._id) || agreement.company._id.equals(req.user._id))) {
+        return res.status(403).json({
+            message: "You are not allowed to access this endpoint!"
+        });
+    }
+
+    if (req.user.role == "Freelancer") {
+        await Agreement.updateOne({
+            _id: new ObjectId(agreement_id)
+        }, {
+            $set: {
+                freelancer_status: 2
+            }
+        });
+
+        if (agreement.company_status == 2) {
+            await Agreement.updateOne({
+                _id: new ObjectId(agreement_id)
+            }, {
+                $set: {
+                    status: 2
+                }
+            });
+        }
+    } else {
+        await Agreement.updateOne({
+            _id: new ObjectId(agreement_id)
+        }, {
+            $set: {
+                company_status: 2
+            }
+        });
+
+        if (agreement.freelancer_status == 2) {
+            await Agreement.updateOne({
+                _id: new ObjectId(agreement_id)
+            }, {
+                $set: {
+                    status: 2
+                }
+            });
+        }
+    }
+
+    return res.status(200).json({
+        message: "Success update status!"
+    });
+}
+
+const rejectProject = async (req, res) => {
+    const { agreement_id } = req.body;
+
+    if (!mongoose.isValidObjectId(agreement_id)) {
+        return res.status(400).json({
+            message: "Invalid ObjectId!"
+        });
+    }
+
+    const agreement = await Agreement.findById(agreement_id);
+    if (!agreement) {
+        return res.status(404).json({
+            message: "Agreement not found!"
+        });
+    }
+
+    if (!(agreement.freelancer._id.equals(req.user._id) || agreement.company._id.equals(req.user._id))) {
+        return res.status(403).json({
+            message: "You are not allowed to access this endpoint!"
+        });
+    }
+
+    await Agreement.updateOne({
+        _id: new ObjectId(agreement_id)
+    }, {
+        $set: {
+            status: -1
+        }
+    });
+
+    return res.status(200).json({
+        message: "Success update status!"
+    });
+}
+
 module.exports = {
     makeAgreement,
     setDealPrice,
     acceptAgreement,
     setEndDate,
-    changeStatus,
     addFile,
     fetchAgreements,
     getAgreement,
     createPayment,
-    midtransResponse
+    midtransResponse,
+    doneProject,
+    rejectProject
 }
