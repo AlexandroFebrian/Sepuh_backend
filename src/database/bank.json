@@ -2,567 +2,567 @@
   "bank_name": [
     {
       "label": "BANK BRI",
-      "value": "002"
+      "value": "bank bri"
     },
     {
       "label": "BANK EKSPOR INDONESIA",
-      "value": "003"
+      "value": "bank ekspor indonesia"
     },
     {
       "label": "BANK MANDIRI",
-      "value": "008"
+      "value": "bank mandiri"
     },
     {
       "label": "BANK BNI",
-      "value": "009"
+      "value": "bank bni"
     },
     {
       "label": "BANK BNI SYARIAH",
-      "value": "427"
+      "value": "bank bni syariah"
     },
     {
       "label": "BANK DANAMON",
-      "value": "011"
+      "value": "bank danamon"
     },
     {
       "label": "PERMATA BANK",
-      "value": "013"
+      "value": "permata bank"
     },
     {
       "label": "BANK BCA",
-      "value": "014"
+      "value": "bank bca"
     },
     {
       "label": "BANK BII",
-      "value": "016"
+      "value": "bank bii"
     },
     {
       "label": "BANK PANIN",
-      "value": "019"
+      "value": "bank panin"
     },
     {
       "label": "BANK ARTA NIAGA KENCANA",
-      "value": "020"
+      "value": "bank arta niaga kencana"
     },
     {
       "label": "BANK NIAGA",
-      "value": "022"
+      "value": "bank niaga"
     },
     {
       "label": "BANK BUANA IND",
-      "value": "023"
+      "value": "bank buana ind"
     },
     {
       "label": "BANK LIPPO",
-      "value": "026"
+      "value": "bank lippo"
     },
     {
       "label": "BANK NISP",
-      "value": "028"
+      "value": "bank nisp"
     },
     {
       "label": "AMERICAN EXPRESS BANK LTD",
-      "value": "030"
+      "value": "american express bank ltd"
     },
     {
       "label": "CITIBANK N.A.",
-      "value": "031"
+      "value": "citibank n.a."
     },
     {
       "label": "JP. MORGAN CHASE BANK, N.A.",
-      "value": "032"
+      "value": "jp. morgan chase bank, n.a."
     },
     {
       "label": "BANK OF AMERICA, N.A",
-      "value": "033"
+      "value": "bank of america, n.a"
     },
     {
       "label": "ING INDONESIA BANK",
-      "value": "034"
+      "value": "ing indonesia bank"
     },
     {
       "label": "BANK MULTICOR TBK.",
-      "value": "036"
+      "value": "bank multicor tbk."
     },
     {
       "label": "BANK ARTHA GRAHA",
-      "value": "037"
+      "value": "bank artha graha"
     },
     {
       "label": "BANK CREDIT AGRICOLE INDOSUEZ",
-      "value": "039"
+      "value": "bank credit agricole indosuez"
     },
     {
       "label": "THE BANGKOK BANK COMP. LTD",
-      "value": "040"
+      "value": "the bangkok bank comp. ltd"
     },
     {
       "label": "THE HONGKONG & SHANGHAI B.C.",
-      "value": "041"
+      "value": "the hongkong & shanghai b.c."
     },
     {
       "label": "THE BANK OF TOKYO MITSUBISHI UFJ LTD",
-      "value": "042"
+      "value": "the bank of tokyo mitsubishi ufj ltd"
     },
     {
       "label": "BANK SUMITOMO MITSUI INDONESIA",
-      "value": "045"
+      "value": "bank sumitomo mitsui indonesia"
     },
     {
       "label": "BANK DBS INDONESIA",
-      "value": "046"
+      "value": "bank dbs indonesia"
     },
     {
       "label": "BANK RESONA PERDANIA",
-      "value": "047"
+      "value": "bank resona perdania"
     },
     {
       "label": "BANK MIZUHO INDONESIA",
-      "value": "048"
+      "value": "bank mizuho indonesia"
     },
     {
       "label": "STANDARD CHARTERED BANK",
-      "value": "050"
+      "value": "standard chartered bank"
     },
     {
       "label": "BANK ABN AMRO",
-      "value": "052"
+      "value": "bank abn amro"
     },
     {
       "label": "BANK KEPPEL TATLEE BUANA",
-      "value": "053"
+      "value": "bank keppel tatlee buana"
     },
     {
       "label": "BANK CAPITAL INDONESIA, TBK.",
-      "value": "054"
+      "value": "bank capital indonesia, tbk."
     },
     {
       "label": "BANK BNP PARIBAS INDONESIA",
-      "value": "057"
+      "value": "bank bnp paribas indonesia"
     },
     {
       "label": "BANK UOB INDONESIA",
-      "value": "058"
+      "value": "bank uob indonesia"
     },
     {
       "label": "KOREA EXCHANGE BANK DANAMON",
-      "value": "059"
+      "value": "korea exchange bank danamon"
     },
     {
       "label": "RABOBANK INTERNASIONAL INDONESIA",
-      "value": "060"
+      "value": "rabobank internasional indonesia"
     },
     {
       "label": "ANZ PANIN BANK",
-      "value": "061"
+      "value": "anz panin bank"
     },
     {
       "label": "DEUTSCHE BANK AG.",
-      "value": "067"
+      "value": "deutsche bank ag."
     },
     {
       "label": "BANK WOORI INDONESIA",
-      "value": "068"
+      "value": "bank woori indonesia"
     },
     {
       "label": "BANK OF CHINA LIMITED",
-      "value": "069"
+      "value": "bank of china limited"
     },
     {
       "label": "BANK BUMI ARTA",
-      "value": "076"
+      "value": "bank bumi arta"
     },
     {
       "label": "BANK EKONOMI",
-      "value": "087"
+      "value": "bank ekonomi"
     },
     {
       "label": "BANK ANTARDAERAH",
-      "value": "088"
+      "value": "bank antardaerah"
     },
     {
       "label": "BANK HAGA",
-      "value": "089"
+      "value": "bank haga"
     },
     {
       "label": "BANK IFI",
-      "value": "093"
+      "value": "bank ifi"
     },
     {
       "label": "BANK CENTURY, TBK.",
-      "value": "095"
+      "value": "bank century, tbk."
     },
     {
       "label": "BANK MAYAPADA",
-      "value": "097"
+      "value": "bank mayapada"
     },
     {
       "label": "BANK JABAR",
-      "value": "110"
+      "value": "bank jabar"
     },
     {
       "label": "BANK DKI",
-      "value": "111"
+      "value": "bank dki"
     },
     {
       "label": "BPD DIY",
-      "value": "112"
+      "value": "bpd diy"
     },
     {
       "label": "BANK JATENG",
-      "value": "113"
+      "value": "bank jateng"
     },
     {
       "label": "BANK JATIM",
-      "value": "114"
+      "value": "bank jatim"
     },
     {
       "label": "BPD JAMBI",
-      "value": "115"
+      "value": "bpd jambi"
     },
     {
       "label": "BPD ACEH",
-      "value": "116"
+      "value": "bpd aceh"
     },
     {
       "label": "BANK SUMUT",
-      "value": "117"
+      "value": "bank sumut"
     },
     {
       "label": "BANK NAGARI",
-      "value": "118"
+      "value": "bank nagari"
     },
     {
       "label": "BANK RIAU",
-      "value": "119"
+      "value": "bank riau"
     },
     {
       "label": "BANK SUMSEL",
-      "value": "120"
+      "value": "bank sumsel"
     },
     {
       "label": "BANK LAMPUNG",
-      "value": "121"
+      "value": "bank lampung"
     },
     {
       "label": "BPD KALSEL",
-      "value": "122"
+      "value": "bpd kalsel"
     },
     {
       "label": "BPD KALIMANTAN BARAT",
-      "value": "123"
+      "value": "bpd kalimantan barat"
     },
     {
       "label": "BPD KALTIM",
-      "value": "124"
+      "value": "bpd kaltim"
     },
     {
       "label": "BPD KALTENG",
-      "value": "125"
+      "value": "bpd kalteng"
     },
     {
       "label": "BPD SULSEL",
-      "value": "126"
+      "value": "bpd sulsel"
     },
     {
       "label": "BANK SULUT",
-      "value": "127"
+      "value": "bank sulut"
     },
     {
       "label": "BPD NTB",
-      "value": "128"
+      "value": "bpd ntb"
     },
     {
       "label": "BPD BALI",
-      "value": "129"
+      "value": "bpd bali"
     },
     {
       "label": "BANK NTT",
-      "value": "130"
+      "value": "bank ntt"
     },
     {
       "label": "BANK MALUKU",
-      "value": "131"
+      "value": "bank maluku"
     },
     {
       "label": "BPD PAPUA",
-      "value": "132"
+      "value": "bpd papua"
     },
     {
       "label": "BANK BENGKULU",
-      "value": "133"
+      "value": "bank bengkulu"
     },
     {
       "label": "BPD SULAWESI TENGAH",
-      "value": "134"
+      "value": "bpd sulawesi tengah"
     },
     {
       "label": "BANK SULTRA",
-      "value": "135"
+      "value": "bank sultra"
     },
     {
       "label": "BANK NUSANTARA PARAHYANGAN",
-      "value": "145"
+      "value": "bank nusantara parahyangan"
     },
     {
       "label": "BANK SWADESI",
-      "value": "146"
+      "value": "bank swadesi"
     },
     {
       "label": "BANK MUAMALAT",
-      "value": "147"
+      "value": "bank muamalat"
     },
     {
       "label": "BANK MESTIKA",
-      "value": "151"
+      "value": "bank mestika"
     },
     {
       "label": "BANK METRO EXPRESS",
-      "value": "152"
+      "value": "bank metro express"
     },
     {
       "label": "BANK SHINTA INDONESIA",
-      "value": "153"
+      "value": "bank shinta indonesia"
     },
     {
       "label": "BANK MASPION",
-      "value": "157"
+      "value": "bank maspion"
     },
     {
       "label": "BANK HAGAKITA",
-      "value": "159"
+      "value": "bank hagakita"
     },
     {
       "label": "BANK GANESHA",
-      "value": "161"
+      "value": "bank ganesha"
     },
     {
       "label": "BANK WINDU KENTJANA",
-      "value": "162"
+      "value": "bank windu kentjana"
     },
     {
       "label": "HALIM INDONESIA BANK",
-      "value": "164"
+      "value": "halim indonesia bank"
     },
     {
       "label": "BANK HARMONI INTERNATIONAL",
-      "value": "166"
+      "value": "bank harmoni international"
     },
     {
       "label": "BANK KESAWAN",
-      "value": "167"
+      "value": "bank kesawan"
     },
     {
       "label": "BANK TABUNGAN NEGARA (PERSERO)",
-      "value": "200"
+      "value": "bank tabungan negara (persero)"
     },
     {
       "label": "BANK HIMPUNAN SAUDARA 1906, TBK .",
-      "value": "212"
+      "value": "bank himpunan saudara 1906, tbk ."
     },
     {
       "label": "BANK TABUNGAN PENSIUNAN NASIONAL",
-      "value": "213"
+      "value": "bank tabungan pensiunan nasional"
     },
     {
       "label": "BANK SWAGUNA",
-      "value": "405"
+      "value": "bank swaguna"
     },
     {
       "label": "BANK JASA ARTA",
-      "value": "422"
+      "value": "bank jasa arta"
     },
     {
       "label": "BANK MEGA",
-      "value": "426"
+      "value": "bank mega"
     },
     {
       "label": "BANK JASA JAKARTA",
-      "value": "427"
+      "value": "bank jasa jakarta"
     },
     {
       "label": "BANK BUKOPIN",
-      "value": "441"
+      "value": "bank bukopin"
     },
     {
       "label": "BANK SYARIAH MANDIRI",
-      "value": "451"
+      "value": "bank syariah mandiri"
     },
     {
       "label": "BANK BISNIS INTERNASIONAL",
-      "value": "459"
+      "value": "bank bisnis internasional"
     },
     {
       "label": "BANK SRI PARTHA",
-      "value": "466"
+      "value": "bank sri partha"
     },
     {
       "label": "BANK JASA JAKARTA",
-      "value": "472"
+      "value": "bank jasa jakarta"
     },
     {
       "label": "BANK BINTANG MANUNGGAL",
-      "value": "484"
+      "value": "bank bintang manunggal"
     },
     {
       "label": "BANK BUMIPUTERA",
-      "value": "485"
+      "value": "bank bumiputera"
     },
     {
       "label": "BANK YUDHA BHAKTI",
-      "value": "490"
+      "value": "bank yudha bhakti"
     },
     {
       "label": "BANK MITRANIAGA",
-      "value": "491"
+      "value": "bank mitraniaga"
     },
     {
       "label": "BANK AGRO NIAGA",
-      "value": "494"
+      "value": "bank agro niaga"
     },
     {
       "label": "BANK INDOMONEX",
-      "value": "498"
+      "value": "bank indomonex"
     },
     {
       "label": "BANK ROYAL INDONESIA",
-      "value": "501"
+      "value": "bank royal indonesia"
     },
     {
       "label": "BANK ALFINDO",
-      "value": "503"
+      "value": "bank alfindo"
     },
     {
       "label": "BANK SYARIAH MEGA",
-      "value": "506"
+      "value": "bank syariah mega"
     },
     {
       "label": "BANK INA PERDANA",
-      "value": "513"
+      "value": "bank ina perdana"
     },
     {
       "label": "BANK HARFA",
-      "value": "517"
+      "value": "bank harfa"
     },
     {
       "label": "PRIMA MASTER BANK",
-      "value": "520"
+      "value": "prima master bank"
     },
     {
       "label": "BANK PERSYARIKATAN INDONESIA",
-      "value": "521"
+      "value": "bank persyarikatan indonesia"
     },
     {
       "label": "BANK AKITA",
-      "value": "525"
+      "value": "bank akita"
     },
     {
       "label": "LIMAN INTERNATIONAL BANK",
-      "value": "526"
+      "value": "liman international bank"
     },
     {
       "label": "ANGLOMAS INTERNASIONAL BANK",
-      "value": "531"
+      "value": "anglomas internasional bank"
     },
     {
       "label": "BANK DIPO INTERNATIONAL",
-      "value": "523"
+      "value": "bank dipo international"
     },
     {
       "label": "BANK KESEJAHTERAAN EKONOMI",
-      "value": "535"
+      "value": "bank kesejahteraan ekonomi"
     },
     {
       "label": "BANK UIB",
-      "value": "536"
+      "value": "bank uib"
     },
     {
       "label": "BANK ARTOS IND",
-      "value": "542"
+      "value": "bank artos ind"
     },
     {
       "label": "BANK PURBA DANARTA",
-      "value": "547"
+      "value": "bank purba danarta"
     },
     {
       "label": "BANK MULTI ARTA SENTOSA",
-      "value": "548"
+      "value": "bank multi arta sentosa"
     },
     {
       "label": "BANK MAYORA",
-      "value": "553"
+      "value": "bank mayora"
     },
     {
       "label": "BANK INDEX SELINDO",
-      "value": "555"
+      "value": "bank index selindo"
     },
     {
       "label": "BANK VICTORIA INTERNATIONAL",
-      "value": "566"
+      "value": "bank victoria international"
     },
     {
       "label": "BANK EKSEKUTIF",
-      "value": "558"
+      "value": "bank eksekutif"
     },
     {
       "label": "CENTRATAMA NASIONAL BANK",
-      "value": "559"
+      "value": "centratama nasional bank"
     },
     {
       "label": "BANK FAMA INTERNASIONAL",
-      "value": "562"
+      "value": "bank fama internasional"
     },
     {
       "label": "BANK SINAR HARAPAN BALI",
-      "value": "564"
+      "value": "bank sinar harapan bali"
     },
     {
       "label": "BANK HARDA",
-      "value": "567"
+      "value": "bank harda"
     },
     {
       "label": "BANK FINCONESIA",
-      "value": "945"
+      "value": "bank finconesia"
     },
     {
       "label": "BANK MERINCORP",
-      "value": "946"
+      "value": "bank merincorp"
     },
     {
       "label": "BANK MAYBANK INDOCORP",
-      "value": "947"
+      "value": "bank maybank indocorp"
     },
     {
       "label": "BANK OCBC – INDONESIA",
-      "value": "948"
+      "value": "bank ocbc – indonesia"
     },
     {
       "label": "BANK CHINA TRUST INDONESIA",
-      "value": "949"
+      "value": "bank china trust indonesia"
     },
     {
       "label": "BANK COMMONWEALTH",
-      "value": "950"
+      "value": "bank commonwealth"
     },
     {
       "label": "BANK BJB SYARIAH",
-      "value": "425"
+      "value": "bank bjb syariah"
     },
     {
       "label": "BPR KS (KARYAJATNIKA SEDAYA)",
-      "value": "688"
+      "value": "bpr ks (karyajatnika sedaya)"
     },
     {
       "label": "INDOSAT DOMPETKU",
-      "value": "789"
+      "value": "indosat dompetku"
     },
     {
       "label": "TELKOMSEL TCASH",
-      "value": "911"
+      "value": "telkomsel tcash"
     },
     {
       "label": "LINKAJA",
-      "value": "911"
+      "value": "linkaja"
     }
   ]
 }
