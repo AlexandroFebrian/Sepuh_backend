@@ -1,5 +1,6 @@
 const { ObjectId } = require('mongodb');
 const mongoose = require('mongoose');
+const axios = require('axios');
 const env = require("../config/env.config");
 
 const Agreement = require("../models/Agreement");
@@ -322,6 +323,73 @@ const getAgreement = async (req, res) => {
     return res.status(200).json(agreement);
 }
 
+const createPayment = async (req, res) => {
+    const { agreement_id } = req.body;
+
+    if (req.user.role != "Company") {
+        return res.status(403).json({
+            message: "You are not allowed to access this payment!"
+        });
+    }
+
+    if (!mongoose.isValidObjectId(agreement_id)) {
+        return res.status(400).json({
+            message: "Invalid ObjectId!"
+        });
+    }
+
+    const agreement = await Agreement.findById(agreement_id);
+    if (!agreement) {
+        return res.status(404).json({
+            message: "Agreement not found!"
+        });
+    }
+
+    if (!(agreement.freelancer._id.equals(req.user._id) || agreement.company._id.equals(req.user._id))) {
+        return res.status(403).json({
+            message: "You are not allowed to access this payment!"
+        });
+    }
+    
+    const option = {
+        method: 'POST',
+        url: "https://app.sandbox.midtrans.com/snap/v1/transactions",
+        headers: {
+            "accept": "application/json",
+            "content-type": "application/json",
+            "authorization": "Basic " + Buffer.from(env("SERVER_KEY")).toString("base64")
+        },
+        data: {
+            transaction_details: {
+                order_id: agreement.invoice,
+                gross_amount: agreement.deal_price,
+            },
+            customer_details: {
+                email: req.user.email
+            },
+            credit_card: { secure: true },
+            callbacks: { finish: env("FRONTEND_HOST") + "/success" }
+        }
+    }
+
+    await axios.request(option).then(async (response)=>{
+        console.log("Payment created successfully!");
+
+        return res.status(201).json({
+            message: "Requested Payment",
+            midtrans: response.data
+        });
+    })
+}
+
+const midtransResponse = async (req, res) => {
+    console.log("req : ", req);
+    console.log("res : ", res);
+    return res.status(200).json({
+        message: "OK"
+    });
+}
+
 module.exports = {
     makeAgreement,
     setDealPrice,
@@ -330,5 +398,7 @@ module.exports = {
     changeStatus,
     addFile,
     fetchAgreements,
-    getAgreement
+    getAgreement,
+    createPayment,
+    midtransResponse
 }
