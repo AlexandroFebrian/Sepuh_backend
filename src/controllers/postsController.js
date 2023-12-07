@@ -251,7 +251,7 @@ const addReview = async (req, res) => {
 
     user_rating = parseInt(user_rating) / parseInt(count);
 
-    const u = await User.updateOne({
+    await User.updateOne({
         _id: post.user_id
     }, {
         $set: {
