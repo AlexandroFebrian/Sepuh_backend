@@ -3,6 +3,8 @@ const mongoose = require('mongoose');
 const env = require("../config/env.config");
 
 const Post = require("../models/Post");
+const Agreement = require('../models/Agreement');
+const User = require('../models/User');
 
 const fetchPosts = async (role, res, email, id) => {
     try {
@@ -192,6 +194,76 @@ const addView = async (req, res) => {
     });
 }
 
+const addReview = async (req, res) => {
+    const { comment, rating, agreement_id } = req.body;
+    
+    if (!comment || !rating || rating < 1 || !agreement_id) {
+        return res.status(400).json({
+            message: `Input must not be empty!`
+        });
+    }
+
+    if (!mongoose.Types.ObjectId.isValid(agreement_id)) {
+        return res.status(400).json({ error: 'Invalid ObjectID' });
+    }
+
+    const agreement = await Agreement.findById(agreement_id);
+    const post = await Post.findById(agreement.post);
+
+    let avg_rating = 0;
+    for (let i = 0; i < post.comments.length; i++) {
+        const ra = post.comments[i].rating;
+        avg_rating += parseInt(ra);
+    }
+    avg_rating = (parseInt(avg_rating) + parseInt(rating)) / (post.comments.length + 1);
+
+    await Post.updateOne({
+        _id: agreement.post
+    }, {
+        $set: {
+            avg_rating: avg_rating
+        },
+        $addToSet: {
+            comments: {
+                user_id: req.user._id,
+                rating: rating,
+                comment: comment
+            }
+        }
+    });
+    agreement.status = 3;
+    await agreement.save();
+
+    const all_post = await Post.find({
+        user_id: post.user_id,
+        status: 1
+    });
+
+    let user_rating = 0;
+    let count = 0;
+    for (let i = 0; i < all_post.length; i++) {
+        const ra = all_post[i].avg_rating;
+        if (ra != 0){
+            user_rating += ra;
+            count++;
+        }
+    }
+
+    user_rating = parseInt(user_rating) / parseInt(count);
+
+    const u = await User.updateOne({
+        _id: post.user_id
+    }, {
+        $set: {
+            rating: user_rating
+        }
+    });
+
+    return res.status(200).json({
+        message: "Success add review!"
+    });
+}
+
 module.exports = {
     fetchFreelancerPosts,
     fetchCompanyPosts,
@@ -199,5 +271,6 @@ module.exports = {
     getUserPosts,
     getUserPostsByEmail,
     getPostsById,
-    addView
+    addView,
+    addReview
 }
