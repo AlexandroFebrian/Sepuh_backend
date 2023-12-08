@@ -215,7 +215,7 @@ const addReview = async (req, res) => {
         const ra = post.comments[i].rating;
         avg_rating += parseInt(ra);
     }
-    avg_rating = (parseInt(avg_rating) + parseInt(rating)) / (post.comments.length + 1);
+    avg_rating = Math.round(((parseInt(avg_rating) + parseInt(rating)) / (post.comments.length + 1)) * 100) / 100;
 
     await Post.updateOne({
         _id: agreement.post
@@ -249,7 +249,7 @@ const addReview = async (req, res) => {
         }
     }
 
-    user_rating = parseInt(user_rating) / parseInt(count);
+    user_rating = Math.round((parseInt(user_rating) / parseInt(count)) * 100) / 100;
 
     await User.updateOne({
         _id: post.user_id
