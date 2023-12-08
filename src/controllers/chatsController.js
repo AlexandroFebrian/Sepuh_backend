@@ -3,38 +3,46 @@ const mongoose = require('mongoose');
 const env = require("../config/env.config");
 
 const Chat = require("../models/Chat");
+const User = require('../models/User');
 
 const createChat = async (req, res) => {
-    const { user_id } = req.body;
+    const { email } = req.body;
 
-    if (!mongoose.isValidObjectId(user_id)) {
+    if (!email) {
         return res.status(400).json({
             message: `Invalid user_id!`
         });
     }
 
-    const chat = await Chat.findOne({
-        $and: [
-            { users: { $elemMatch: { user_id: req.user._id } } },
-            { users: { $elemMatch: { user_id: new ObjectId(user_id) } } }
-        ]
-    }); 
-
-    if (chat) {
-        return res.status(400).json({
-            message: `User chat already created!`
+    const user = await User.findOne({
+        email: email
+    });
+    if (!user) {
+        return res.status(404).json({
+            message: `User not found!`
         });
     }
 
-    await Chat.create({
-        users: [
-            { user_id: req.user._id, seen: true },
-            { user_id: new ObjectId(user_id), seen: true }
-        ],
-        messages: []
-    });
+    const find = await Chat.findOne({
+        $and: [
+            { users: { $elemMatch: { user_id: req.user._id } } },
+            { users: { $elemMatch: { user_id: user._id } } }
+        ]
+    }); 
 
-    return res.status(200).json({ message: `User chat created!` });
+    if (!find) {
+        await Chat.create({
+            users: [
+                { user_id: req.user._id, seen: true },
+                { user_id: new ObjectId(user._id), seen: true }
+            ],
+            messages: []
+        });
+    }
+
+    req.params.user_id = user._id;
+
+    getChatWith(req, res);
 }
 
 const sendMessage = async (req, res) => {
