@@ -491,6 +491,80 @@ const updateDocument = async (req, res) => {
     });
 }
 
+const hireUser = async (req, res) => {
+    const { user_id } = req.body;
+
+    if (!target_id) {
+        return res.status(400).json({
+            message: `target_id must not be empty!`
+        });
+    } else if (!isValidObjectId(target_id)) {
+        return res.status(400).json({
+            message: `target_id must be valid ObjectId!`
+        });
+    }
+
+    if (req.user.role == "Freelancer") {
+        const user = await User.findById(user_id);
+        if (user.employees.find((e) => e.equals(req.user._id))) {
+            return res.status(400).json({
+                message: `User is already beeing an employee!`
+            });
+        } else if (user.notifications.find((n) => n.from.equals(req.user._id) && n.category == "Hired")) {
+            return res.status(400).json({
+                message: `User is already applied to this company!`
+            });
+        } else if (req.user.notifications.find((n) => n.from.equals(user._id) && n.category == "Hired")) {
+            return res.status(400).json({
+                message: `User is already applied to this company!`
+            });
+        } else {
+            await User.updateOne({
+                _id: user_id
+            }, {
+                $push: {
+                    notifications: {
+                        from: req.user._id,
+                        message: `<b>${req.user.name}</b> wants to be your employee!`,
+                        category: "Hired",
+                        link: `/api/users/profile/${req.user.email}`,
+                        read: false
+                    }
+                }
+            });
+        }
+    } else {
+        const user = await User.findById(user_id);
+        if (req.user.employees.find((e) => e.equals(user_id))) {
+            return res.status(400).json({
+                message: `User is already beeing an employee!`
+            });
+        } else if (user.notifications.find((n) => n.from.equals(req.user._id) && n.category == "Hired")) {
+            return res.status(400).json({
+                message: `User is already applied to this company!`
+            });
+        } else if (req.user.notifications.find((n) => n.from.equals(user_id) && n.category == "Hired")) {
+            return res.status(400).json({
+                message: `User is already applied to this company!`
+            });
+        } else {
+            await User.updateOne({
+                _id: user_id
+            }, {
+                $push: {
+                    notifications: {
+                        from: req.user._id,
+                        message: `<b>${req.user.name}</b> wants to hire you to be an employee!`,
+                        category: "Hired",
+                        link: `/api/users/profile/${req.user.email}`,
+                        read: false
+                    }
+                }
+            });
+        }
+    }
+}
+
 module.exports = {
     registerUser,
     verifyUser,
@@ -507,5 +581,6 @@ module.exports = {
     removeFromList,
     getUserNotifications,
     getUserDocument,
-    updateDocument
+    updateDocument,
+    hireUser
 }

@@ -17,7 +17,8 @@ const {
     removeFromList,
     getUserNotifications,
     getUserDocument,
-    updateDocument
+    updateDocument,
+    hireUser
 } = require("../controllers/usersController");
 const { AuthMiddleware } = require("../middlewares/AuthMiddleware");
 const MulterUpload = require("../validations/Multer");
@@ -42,5 +43,6 @@ router.put("/list", removeFromList);
 router.get("/notifications", getUserNotifications);
 router.get("/documents", getUserDocument);
 router.put("/documents", MulterUpload.any(), updateDocument);
+router.post("/hire", hireUser);
 
 module.exports = router;
