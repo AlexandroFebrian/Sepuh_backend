@@ -557,7 +557,8 @@ const hireUser = async (req, res) => {
                         message: `<b>${req.user.name}</b> wants to hire you to be an employee!`,
                         category: "Hired",
                         link: `/api/users/profile/${req.user.email}`,
-                        read: false
+                        read: false,
+                        time: new Date()
                     }
                 }
             });

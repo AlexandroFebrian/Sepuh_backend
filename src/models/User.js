@@ -29,7 +29,8 @@ const userSchema = new Schema({
         message: String,
         category: String,
         link: String,
-        read: Boolean
+        read: Boolean,
+        time: Date
     }],
     employees: [{ type: Schema.Types.ObjectId, ref: 'User' }],
     history: [{ type: Schema.Types.ObjectId, ref: 'Agreement' }],
