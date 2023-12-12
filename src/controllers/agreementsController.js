@@ -443,7 +443,8 @@ const doneProject = async (req, res) => {
                 _id: new ObjectId(agreement_id)
             }, {
                 $set: {
-                    status: 2
+                    status: 2,
+                    end_date: new Date()
                 }
             });
 
@@ -469,7 +470,8 @@ const doneProject = async (req, res) => {
                 _id: new ObjectId(agreement_id)
             }, {
                 $set: {
-                    status: 2
+                    status: 2,
+                    end_date: new Date()
                 }
             });
 
