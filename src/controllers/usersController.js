@@ -526,7 +526,9 @@ const hireUser = async (req, res) => {
                         message: `<b>${req.user.name}</b> wants to be your employee!`,
                         category: "Hired",
                         link: `/api/users/profile/${req.user.email}`,
-                        read: false
+                        read: false,
+                        time: new Date(),
+                        status: 0
                     }
                 }
             });
@@ -558,7 +560,8 @@ const hireUser = async (req, res) => {
                         category: "Hired",
                         link: `/api/users/profile/${req.user.email}`,
                         read: false,
-                        time: new Date()
+                        time: new Date(),
+                        status: 0
                     }
                 }
             });
@@ -605,7 +608,9 @@ const acceptUser = async (req, res) => {
                         message: `<b>${req.user.name}</b> wants to be your employee!`,
                         category: "Hired",
                         link: `/api/users/profile/${req.user.email}`,
-                        read: false
+                        read: false,
+                        time: new Date(),
+                        status: 0
                     }
                 }
             });
@@ -637,7 +642,8 @@ const acceptUser = async (req, res) => {
                         category: "Hired",
                         link: `/api/users/profile/${req.user.email}`,
                         read: false,
-                        time: new Date()
+                        time: new Date(),
+                        status: 0
                     }
                 }
             });

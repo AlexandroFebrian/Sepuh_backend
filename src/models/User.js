@@ -30,7 +30,8 @@ const userSchema = new Schema({
         category: String,
         link: String,
         read: Boolean,
-        time: Date
+        time: Date,
+        status: Number
     }],
     employees: [{ type: Schema.Types.ObjectId, ref: 'User' }],
     history: [{ type: Schema.Types.ObjectId, ref: 'Agreement' }],
