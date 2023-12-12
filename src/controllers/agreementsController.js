@@ -169,7 +169,7 @@ const fetchAgreements = async (req, res) => {
             select: "title image"
         }).populate({
             path: "company",
-            select: "name profile_picture"
+            select: "name profile_picture email "
         });
 
         for (let i = 0; i < agreements.length; i++) {
