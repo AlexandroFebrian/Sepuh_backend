@@ -301,7 +301,7 @@ const updateUserProfile = async (req, res) => {
     });
 
     return res.status(200).json({
-        message: `Successfully update profile`
+        message: `Successfully update profile`,
     });
 }
 
@@ -492,20 +492,18 @@ const updateDocument = async (req, res) => {
 }
 
 const hireUser = async (req, res) => {
-    const { user_id } = req.body;
+    const { email } = req.body;
 
-    if (!target_id) {
+    if (!email) {
         return res.status(400).json({
-            message: `target_id must not be empty!`
-        });
-    } else if (!isValidObjectId(target_id)) {
-        return res.status(400).json({
-            message: `target_id must be valid ObjectId!`
+            message: `Field email must not be empty!`
         });
     }
 
     if (req.user.role == "Freelancer") {
-        const user = await User.findById(user_id);
+        const user = await User.findOne({
+            email: email
+        });
         if (user.employees.find((e) => e.equals(req.user._id))) {
             return res.status(400).json({
                 message: `User is already beeing an employee!`
@@ -520,7 +518,7 @@ const hireUser = async (req, res) => {
             });
         } else {
             await User.updateOne({
-                _id: user_id
+                email: email
             }, {
                 $push: {
                     notifications: {
@@ -534,8 +532,10 @@ const hireUser = async (req, res) => {
             });
         }
     } else {
-        const user = await User.findById(user_id);
-        if (req.user.employees.find((e) => e.equals(user_id))) {
+        const user = await User.findOne({
+            email: email
+        });
+        if (req.user.employees.find((e) => e.equals(user._id))) {
             return res.status(400).json({
                 message: `User is already beeing an employee!`
             });
@@ -543,13 +543,13 @@ const hireUser = async (req, res) => {
             return res.status(400).json({
                 message: `User is already applied to this company!`
             });
-        } else if (req.user.notifications.find((n) => n.from.equals(user_id) && n.category == "Hired")) {
+        } else if (req.user.notifications.find((n) => n.from.equals(user._id) && n.category == "Hired")) {
             return res.status(400).json({
                 message: `User is already applied to this company!`
             });
         } else {
             await User.updateOne({
-                _id: user_id
+                email: email
             }, {
                 $push: {
                     notifications: {
@@ -564,6 +564,14 @@ const hireUser = async (req, res) => {
             });
         }
     }
+
+    return res.status(200).json({
+        message: `Successfully hire / apply!`
+    });
+}
+
+const acceptUser = async (req, res) => {
+    
 }
 
 module.exports = {
