@@ -28,7 +28,7 @@ const createChat = async (req, res) => {
             { users: { $elemMatch: { user_id: req.user._id } } },
             { users: { $elemMatch: { user_id: user._id } } }
         ]
-    }); 
+    });
 
     if (!find) {
         await Chat.create({
@@ -39,6 +39,17 @@ const createChat = async (req, res) => {
             messages: []
         });
     }
+
+    user.notifications.push({
+        from: req.user._id,
+        message: `Here wants to contact you`,
+        category: "Chat",
+        link: "",
+        read: false,
+        time: new Date(),
+        status: 0
+    });
+    await user.save();
 
     req.params.user_id = user._id;
 
