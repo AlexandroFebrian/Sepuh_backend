@@ -14,13 +14,16 @@ const {
     doneProject,
     rejectProject,
     acceptFile,
-    rejectFile
+    rejectFile,
+    fetchAllAgreements
 } = require("../controllers/agreementsController");
 const { AuthMiddleware } = require("../middlewares/AuthMiddleware");
 const MulterUpload = require("../validations/Multer");
 const { AdminMiddleware } = require("../middlewares/AdminMiddleware");
 
 router.post("/dSfbZJgaMxGbGYFsRYDq", midtransResponse);
+
+router.get("/all", AdminMiddleware, fetchAllAgreements);
 
 router.use(AuthMiddleware);
 router.post("/", makeAgreement);

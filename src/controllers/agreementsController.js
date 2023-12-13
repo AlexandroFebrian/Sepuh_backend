@@ -614,6 +614,13 @@ const rejectFile = async (req, res) => {
     });
 }
 
+const fetchAllAgreements = async (req, res) => {
+    const agreements = await Agreement.find({
+        status: 2
+    });
+    return res.status(200).json(agreements);
+}
+
 module.exports = {
     makeAgreement,
     setDealPrice,
@@ -627,5 +634,6 @@ module.exports = {
     doneProject,
     rejectProject,
     acceptFile,
-    rejectFile
+    rejectFile,
+    fetchAllAgreements
 }
