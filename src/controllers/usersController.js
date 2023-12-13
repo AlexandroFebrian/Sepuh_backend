@@ -595,10 +595,6 @@ const acceptUser = async (req, res) => {
         return res.status(400).json({
             message: `Notification not found!`
         });
-    } else if (notification.category != "Hired") {
-        return res.status(400).json({
-            message: `Notification is not hired category!`
-        });
     } else if (notification.status != 0) {
         return res.status(400).json({
             message: `Notification is already accepted / rejected!`
@@ -693,10 +689,6 @@ const rejectUser = async (req, res) => {
     if (!notification) {
         return res.status(400).json({
             message: `Notification not found!`
-        });
-    } else if (notification.category != "Hired") {
-        return res.status(400).json({
-            message: `Notification is not hired category!`
         });
     } else if (notification.status != 0) {
         return res.status(400).json({
