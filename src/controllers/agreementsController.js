@@ -463,7 +463,7 @@ const doneProject = async (req, res) => {
                 _id: new ObjectId(agreement.freelancer)
             }, {
                 $inc: {
-                    balance: agreement.deal_price
+                    balance: agreement.deal_price * 0.9
                 }
             });
         }
@@ -490,7 +490,7 @@ const doneProject = async (req, res) => {
                 _id: new ObjectId(agreement.freelancer)
             }, {
                 $inc: {
-                    balance: agreement.deal_price
+                    balance: agreement.deal_price * 0.9
                 }
             });
         }
