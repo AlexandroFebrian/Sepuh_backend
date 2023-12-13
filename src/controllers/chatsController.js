@@ -38,18 +38,18 @@ const createChat = async (req, res) => {
             ],
             messages: []
         });
-    }
 
-    user.notifications.push({
-        from: req.user._id,
-        message: `Here wants to contact you`,
-        category: "Chat",
-        link: "",
-        read: false,
-        time: new Date(),
-        status: 0
-    });
-    await user.save();
+        user.notifications.push({
+            from: req.user._id,
+            message: `Here wants to contact you`,
+            category: "Chat",
+            link: "",
+            read: false,
+            time: new Date(),
+            status: 0
+        });
+        await user.save();
+    }
 
     req.params.user_id = user._id;
 
