@@ -6,7 +6,7 @@ const Post = require("../models/Post");
 const Agreement = require('../models/Agreement');
 const User = require('../models/User');
 
-const fetchPosts = async (role, res, email, id) => {
+const fetchPosts = async (role, res, email, id, admin) => {
     try {
         const posts = await Post.aggregate([
             {
@@ -56,7 +56,7 @@ const fetchPosts = async (role, res, email, id) => {
                     "posted_by.role": role ? role : /^/,
                     "posted_by.email": email ? email : /^/,
                     "posted_by.status": 1,
-                    status: 1
+                    status: admin ? { $in: [-1, 1] } : 1
                 }
             },
             {
@@ -304,6 +304,11 @@ const unsuspendPost = async (req, res) => {
     });
 }
 
+const getUserPostsByEmailAdmin = async (req, res) => {
+    const admin = req.admin;
+    fetchPosts(null, res, req.params.email, null, admin);
+}
+
 module.exports = {
     fetchFreelancerPosts,
     fetchCompanyPosts,
@@ -314,5 +319,6 @@ module.exports = {
     addView,
     addReview,
     suspendPost,
-    unsuspendPost
+    unsuspendPost,
+    getUserPostsByEmailAdmin
 }

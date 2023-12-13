@@ -13,6 +13,7 @@ async function AdminMiddleware (req, res, next) {
         const admin_password = decodedToken.admin_password;
         
         if (bcrypt.compareSync(env("ADMIN_PASSWORD"), admin_password)) {
+            req.admin = true;
             next();
         } else {
             return res.status(401).json({ message: "Invalid Admin Password" });
