@@ -46,6 +46,17 @@ const makeAgreement = async (req, res) => {
         status: 0
     });
 
+    user.notifications.push({
+        from: req.user._id,
+        message: `Here wants to create an agreement with you`,
+        category: "Agreement",
+        link: "",
+        read: false,
+        time: new Date(),
+        status: 0
+    });
+    await user.save();
+
     return res.status(201).json({
         message: "Success created agreement!",
         id: agreement._id
