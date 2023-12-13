@@ -524,7 +524,7 @@ const hireUser = async (req, res) => {
                     notifications: {
                         from: req.user._id,
                         message: `<b>${req.user.name}</b> wants to be your employee!`,
-                        category: "Hired",
+                        category: "Applied",
                         link: `/api/users/profile/${req.user.email}`,
                         read: false,
                         time: new Date(),
@@ -612,25 +612,25 @@ const acceptUser = async (req, res) => {
                 "notifications.$.status": 1
             }
         });
-        await User.updateOne({
-            $or: [
-                { _id: req.user._id },
-                { _id: notification.from }
-            ]
-        }, {
-            $push: {
-                notifications: {
-                    from: req.user._id,
-                    message: `Accept`,
-                    category: "Hired Accept",
-                    link: `/api/users/profile/${req.user.email}`,
-                    read: false,
-                    time: new Date(),
-                    status: 0
-                }
-            }
-        });
         if (req.user.role == "Freelancer") {
+            await User.updateOne({
+                $or: [
+                    { _id: req.user._id },
+                    { _id: notification.from }
+                ]
+            }, {
+                $push: {
+                    notifications: {
+                        from: req.user._id,
+                        message: `Accept`,
+                        category: "Hired Accept",
+                        link: `/api/users/profile/${req.user.email}`,
+                        read: false,
+                        time: new Date(),
+                        status: 0
+                    }
+                }
+            });
             await User.updateOne({
                 _id: notification.from
             }, {
@@ -639,6 +639,24 @@ const acceptUser = async (req, res) => {
                 }
             });
         } else {
+            await User.updateOne({
+                $or: [
+                    { _id: req.user._id },
+                    { _id: notification.from }
+                ]
+            }, {
+                $push: {
+                    notifications: {
+                        from: req.user._id,
+                        message: `Accept`,
+                        category: "Applied Accept",
+                        link: `/api/users/profile/${req.user.email}`,
+                        read: false,
+                        time: new Date(),
+                        status: 0
+                    }
+                }
+            });
             await User.updateOne({
                 _id: req.user._id
             }, {
@@ -694,24 +712,45 @@ const rejectUser = async (req, res) => {
             }
         });
 
-        await User.updateOne({
-            $or: [
-                { _id: req.user._id },
-                { _id: notification.from }
-            ]
-        }, {
-            $push: {
-                notifications: {
-                    from: req.user._id,
-                    message: `Reject`,
-                    category: "Hired Reject",
-                    link: `/api/users/profile/${req.user.email}`,
-                    read: false,
-                    time: new Date(),
-                    status: 0
+        if (req.user.role == "Freelancer") {
+            await User.updateOne({
+                $or: [
+                    { _id: req.user._id },
+                    { _id: notification.from }
+                ]
+            }, {
+                $push: {
+                    notifications: {
+                        from: req.user._id,
+                        message: `Reject`,
+                        category: "Hired Reject",
+                        link: `/api/users/profile/${req.user.email}`,
+                        read: false,
+                        time: new Date(),
+                        status: 0
+                    }
                 }
-            }
-        });
+            });
+        } else {
+            await User.updateOne({
+                $or: [
+                    { _id: req.user._id },
+                    { _id: notification.from }
+                ]
+            }, {
+                $push: {
+                    notifications: {
+                        from: req.user._id,
+                        message: `Accept`,
+                        category: "Applied Accept",
+                        link: `/api/users/profile/${req.user.email}`,
+                        read: false,
+                        time: new Date(),
+                        status: 0
+                    }
+                }
+            });
+        }
     }
 
     return res.status(200).json({
