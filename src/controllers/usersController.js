@@ -786,6 +786,22 @@ const changePassword = async (req, res) => {
     });
 }
 
+const getEmployees = async (req, res) => {
+    const employees = await User.find({
+        _id: { $in: req.user.employees }
+    }, {
+        password: 0
+    });
+
+    for (let i = 0; i < employees.length; i++) {
+        const employee = employees[i];
+        employee.header_picture = employee.header_picture == "" ? "" : `${ env("HOST") }/api/public/${ employee._doc.header_picture }`;
+        employee.profile_picture = employee.profile_picture == "" ? "" : `${ env("HOST") }/api/public/${ employee._doc.profile_picture }`;
+    }
+
+    return res.status(200).json(employees);
+}
+
 module.exports = {
     registerUser,
     verifyUser,
@@ -806,5 +822,6 @@ module.exports = {
     hireUser,
     acceptUser,
     rejectUser,
-    changePassword
+    changePassword,
+    getEmployees
 }

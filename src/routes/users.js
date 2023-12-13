@@ -21,7 +21,8 @@ const {
     hireUser,
     acceptUser,
     rejectUser,
-    changePassword
+    changePassword,
+    getEmployees
 } = require("../controllers/usersController");
 const { AuthMiddleware } = require("../middlewares/AuthMiddleware");
 const MulterUpload = require("../validations/Multer");
@@ -51,5 +52,6 @@ router.put("/hire/accept", acceptUser);
 router.put("/hire/reject", rejectUser);
 
 router.put("/password", changePassword);
+router.get("/employees", getEmployees);
 
 module.exports = router;
