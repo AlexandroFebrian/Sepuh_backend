@@ -574,85 +574,149 @@ const hireUser = async (req, res) => {
 }
 
 const acceptUser = async (req, res) => {
-    const { email } = req.body;
+    const { notification_id } = req.body;
 
-    if (!email) {
+    if (!notification_id) {
         return res.status(400).json({
-            message: `Field email must not be empty!`
+            message: `Field notification_id must not be empty!`
         });
     }
 
-    if (req.user.role == "Freelancer") {
-        const user = await User.findOne({
-            email: email
+    if (!isValidObjectId(notification_id)) {
+        return res.status(400).json({
+            message: `Field notification_id must be valid ObjectId!`
         });
-        if (user.employees.find((e) => e.equals(req.user._id))) {
-            return res.status(400).json({
-                message: `User is already beeing an employee!`
-            });
-        } else if (user.notifications.find((n) => n.from.equals(req.user._id) && n.category == "Hired")) {
-            return res.status(400).json({
-                message: `User is already applied to this company!`
-            });
-        } else if (req.user.notifications.find((n) => n.from.equals(user._id) && n.category == "Hired")) {
-            return res.status(400).json({
-                message: `User is already applied to this company!`
-            });
-        } else {
+    }
+
+    const user = await User.findById(req.user._id);
+    const notification = user.notifications.find((n) => n._id.equals(new ObjectId(notification_id)));
+
+    if (!notification) {
+        return res.status(400).json({
+            message: `Notification not found!`
+        });
+    } else if (notification.category != "Hired") {
+        return res.status(400).json({
+            message: `Notification is not hired category!`
+        });
+    } else if (notification.status != 0) {
+        return res.status(400).json({
+            message: `Notification is already accepted / rejected!`
+        });
+    } else {
+        await User.updateOne({
+            _id: req.user._id,
+            "notifications._id": notification._id
+        }, {
+            $set: {
+                "notifications.$.status": 1
+            }
+        });
+        await User.updateOne({
+            $or: [
+                { _id: req.user._id },
+                { _id: notification.from }
+            ]
+        }, {
+            $push: {
+                notifications: {
+                    from: req.user._id,
+                    message: `Accept`,
+                    category: "Hired Accept",
+                    link: `/api/users/profile/${req.user.email}`,
+                    read: false,
+                    time: new Date(),
+                    status: 0
+                }
+            }
+        });
+        if (req.user.role == "Freelancer") {
             await User.updateOne({
-                email: email
+                _id: notification.from
             }, {
                 $push: {
-                    notifications: {
-                        from: req.user._id,
-                        message: `<b>${req.user.name}</b> wants to be your employee!`,
-                        category: "Hired",
-                        link: `/api/users/profile/${req.user.email}`,
-                        read: false,
-                        time: new Date(),
-                        status: 0
-                    }
+                    employees: req.user._id
                 }
             });
-        }
-    } else {
-        const user = await User.findOne({
-            email: email
-        });
-        if (req.user.employees.find((e) => e.equals(user._id))) {
-            return res.status(400).json({
-                message: `User is already beeing an employee!`
-            });
-        } else if (user.notifications.find((n) => n.from.equals(req.user._id) && n.category == "Hired")) {
-            return res.status(400).json({
-                message: `User is already applied to this company!`
-            });
-        } else if (req.user.notifications.find((n) => n.from.equals(user._id) && n.category == "Hired")) {
-            return res.status(400).json({
-                message: `User is already applied to this company!`
-            });
         } else {
             await User.updateOne({
-                email: email
+                _id: req.user._id
             }, {
                 $push: {
-                    notifications: {
-                        from: req.user._id,
-                        message: `<b>${req.user.name}</b> wants to hire you to be an employee!`,
-                        category: "Hired",
-                        link: `/api/users/profile/${req.user.email}`,
-                        read: false,
-                        time: new Date(),
-                        status: 0
-                    }
+                    employees: notification.from
                 }
             });
         }
     }
+
+    return res.status(200).json({
+        message: `Successfully accept!`
+    });
 }
 
 const rejectUser = async (req, res) => {
+    const { notification_id } = req.body;
 
+    if (!notification_id) {
+        return res.status(400).json({
+            message: `Field notification_id must not be empty!`
+        });
+    }
+
+    if (!isValidObjectId(notification_id)) {
+        return res.status(400).json({
+            message: `Field notification_id must be valid ObjectId!`
+        });
+    }
+
+    const user = await User.findById(req.user._id);
+    const notification = user.notifications.find((n) => n._id.equals(new ObjectId(notification_id)));
+
+    if (!notification) {
+        return res.status(400).json({
+            message: `Notification not found!`
+        });
+    } else if (notification.category != "Hired") {
+        return res.status(400).json({
+            message: `Notification is not hired category!`
+        });
+    } else if (notification.status != 0) {
+        return res.status(400).json({
+            message: `Notification is already accepted / rejected!`
+        });
+    } else {
+        await User.updateOne({
+            _id: req.user._id,
+            "notifications._id": notification._id
+        }, {
+            $set: {
+                "notifications.$.status": -1
+            }
+        });
+
+        await User.updateOne({
+            $or: [
+                { _id: req.user._id },
+                { _id: notification.from }
+            ]
+        }, {
+            $push: {
+                notifications: {
+                    from: req.user._id,
+                    message: `Reject`,
+                    category: "Hired Reject",
+                    link: `/api/users/profile/${req.user.email}`,
+                    read: false,
+                    time: new Date(),
+                    status: 0
+                }
+            }
+        });
+    }
+
+    return res.status(200).json({
+        message: `Successfully reject!`
+    });
 }
 
 const changePassword = async (req, res) => {

@@ -47,6 +47,8 @@ router.get("/notifications", getUserNotifications);
 router.get("/documents", getUserDocument);
 router.put("/documents", MulterUpload.any(), updateDocument);
 router.post("/hire", hireUser);
+router.put("/hire/accept", acceptUser);
+router.put("/hire/reject", rejectUser);
 
 router.put("/password", changePassword);
 
