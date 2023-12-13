@@ -264,6 +264,46 @@ const addReview = async (req, res) => {
     });
 }
 
+const suspendPost = async (req, res) => {
+    const { post_id } = req.params;
+
+    if (!mongoose.Types.ObjectId.isValid(post_id)) {
+        return res.status(400).json({ error: 'Invalid ObjectID' });
+    }
+
+    await Post.updateOne({
+        _id: post_id
+    }, {
+        $set: {
+            status: -1
+        }
+    });
+
+    return res.status(200).json({
+        message: "Success suspend post!"
+    });
+}
+
+const unsuspendPost = async (req, res) => {
+    const { post_id } = req.params;
+
+    if (!mongoose.Types.ObjectId.isValid(post_id)) {
+        return res.status(400).json({ error: 'Invalid ObjectID' });
+    }
+
+    await Post.updateOne({
+        _id: post_id
+    }, {
+        $set: {
+            status: 1
+        }
+    });
+
+    return res.status(200).json({
+        message: "Success unsuspend post!"
+    });
+}
+
 module.exports = {
     fetchFreelancerPosts,
     fetchCompanyPosts,
@@ -272,5 +312,7 @@ module.exports = {
     getUserPostsByEmail,
     getPostsById,
     addView,
-    addReview
+    addReview,
+    suspendPost,
+    unsuspendPost
 }

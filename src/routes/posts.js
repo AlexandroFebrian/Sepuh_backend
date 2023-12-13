@@ -9,10 +9,16 @@ const {
     getUserPostsByEmail,
     getPostsById,
     addView,
-    addReview
+    addReview,
+    suspendPost,
+    unsuspendPost
 } = require("../controllers/postsController");
 const { AuthMiddleware } = require("../middlewares/AuthMiddleware");
 const MulterUpload = require("../validations/Multer");
+const { AdminMiddleware } = require("../middlewares/AdminMiddleware");
+
+router.put("/suspend/:post_id", AdminMiddleware, suspendPost);
+router.put("/unsuspend/:post_id", AdminMiddleware, unsuspendPost);
 
 router.get("/freelancer", fetchFreelancerPosts);
 router.get("/company", fetchCompanyPosts);
