@@ -615,9 +615,28 @@ const rejectFile = async (req, res) => {
 }
 
 const fetchAllAgreements = async (req, res) => {
-    const agreements = await Agreement.find({
-        status: 2
+    const agreements = await Agreement.find().populate({
+        path: "post",
+        select: "title image"
+    }).populate({
+        path: "company",
+        select: "name profile_picture email "
     });
+
+    for (let i = 0; i < agreements.length; i++) {
+        const agr = agreements[i];
+        
+        for (let j = 0; j < agr.post.image.length; j++) {
+            const img = agr.post.image[j];
+            if (!agreements[i].post.image[j].includes(env("HOST"))) {
+                agreements[i].post.image[j] = img == "" ? "" : `${env("HOST")}/api/public/${img}`;
+            }
+        }
+        if (!agr.company.profile_picture.includes(env("HOST"))) {
+            agreements[i].company.profile_picture = agr.company.profile_picture == "" ? "" : `${env("HOST")}/api/public/${agr.company.profile_picture}`;
+        }
+    }
+
     return res.status(200).json(agreements);
 }
 
