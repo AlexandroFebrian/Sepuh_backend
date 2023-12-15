@@ -135,7 +135,7 @@ const addPost = async (req, res) => {
             });
         }
         
-        await Post.create({
+        const post = await Post.create({
             title: title,
             duration: duration ? duration : 0,
             duration_type: duration_type ? duration_type : "",
@@ -152,7 +152,8 @@ const addPost = async (req, res) => {
         });
 
         res.status(201).json({
-            message: `Post successfully created!`
+            message: `Post successfully created!`,
+            post_id: post._id
         });
     } catch (error) {
         res.status(500).json({ error: error.message });
