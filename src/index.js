@@ -1,6 +1,7 @@
 const express = require("express");
 const app = express();
 const cors = require("cors");
+const env = require("./config/env.config");
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -18,8 +19,8 @@ app.all("*", async (req, res) => {
     });
 })
 
-const port = 3000;
+const port = env("PORT") ? env("PORT") : 3000;
 app.listen(port, () => {
-    console.log('\x1Bc');
+    // console.log('\x1Bc');
     console.log(`Listening on port ${port}!`);
 });

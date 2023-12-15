@@ -9,7 +9,8 @@ const dictionary = {
     ADMIN_PASSWORD: process.env.ADMIN_PASSWORD,
     SERVER_KEY: process.env.SERVER_KEY,
     CLIENT_KEY: process.env.CLIENT_KEY,
-    FRONTEND_HOST: process.env.FRONTEND_HOST
+    FRONTEND_HOST: process.env.FRONTEND_HOST,
+    PORT: process.env.PORT
 };
 
 module.exports = function env(key) {
