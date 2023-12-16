@@ -50,7 +50,7 @@ const makeAgreement = async (req, res) => {
         from: req.user._id,
         message: `Here wants to create an agreement with you`,
         category: "Agreement",
-        link: "",
+        link: agreement._id,
         read: false,
         time: new Date(),
         status: 0
