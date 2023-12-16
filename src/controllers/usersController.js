@@ -443,8 +443,6 @@ const getUserNotifications = async (req, res) => {
 
     for (let i = 0; i < user.notifications.length; i++) {
         const notification = user.notifications[i];
-        user.notifications[i].link = notification.link == "" ? "" : (env("HOST") + notification.link);
-
         const from = notification.from;
         profile_picture = from.profile_picture;
         
