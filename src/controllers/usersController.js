@@ -39,7 +39,7 @@ const registerUser = async (req, res) => {
             from: env("EMAIL_ADDRESS"),
             to: email,
             subject: 'Verify your Sepuh registration account',
-            text: `Click link below to verify your account http://${ env("HOST") }/api/users/verify/${ token }`
+            text: `Click link below to verify your account ${ env("FRONTEND_HOST") }/verify?token=${ token }`
         };
         
         transporter.sendMail(mailOptions, (error, info) => {
