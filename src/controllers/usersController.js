@@ -225,7 +225,7 @@ const fetchUser = async (req, res) => {
 const banUser = async (req, res) => {
     const { email } = req.params;
 
-    if (email == "") {
+    if (!email.includes('@')) {
         return res.status(400).json({
             message: `Email must not be empty!`
         });
@@ -241,7 +241,7 @@ const banUser = async (req, res) => {
 const unbanUser = async (req, res) => {
     const { email } = req.params;
     
-    if (email == "") {
+    if (!email.includes('@')) {
         return res.status(400).json({
             message: `Email must not be empty!`
         });
