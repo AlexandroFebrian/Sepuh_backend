@@ -57,7 +57,7 @@ router.post("/cekTokenAdmin", async (req, res) => {
   try {
     const decoded = jwt.verify(token, env("SECRET_KEY"));
     if (!bcrypt.compareSync(env("ADMIN_PASSWORD"), decoded.admin_password)) {
-      return res.status(401).json({
+      return res.status(403).json({
         status: false,
         message: "Invalid token",
       });
@@ -72,7 +72,7 @@ router.post("/cekTokenAdmin", async (req, res) => {
       });
     }
   } catch (error) {
-    return res.status(401).json({
+    return res.status(403).json({
       status: false,
       message: "Invalid token",
     });
